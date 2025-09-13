@@ -1,4 +1,3 @@
-// components/UserArea.jsx
 "use client";
 import { useSession, signOut, signIn } from "next-auth/react";
 import Image from "next/image";
