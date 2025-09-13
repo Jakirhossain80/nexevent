@@ -1,18 +1,19 @@
 "use client";
 
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 
 export default function Providers({ children }) {
   return (
-    <ThemeProvider
-      attribute="class"      // adds/removes 'dark' on <html>
-      defaultTheme="system"  // 'light' | 'dark' | 'system'
-      enableSystem
-      disableTransitionOnChange
-    >
-      {children}
-    </ThemeProvider>
+    <SessionProvider>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+      </ThemeProvider>
+    </SessionProvider>
   );
 }
-
-

@@ -51,14 +51,14 @@ export default function Navbar() {
       "
     >
       <nav
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+        className="max-[1980px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
         role="navigation"
         aria-label="Main"
       >
         {/* Left: Logo + Brand */}
         <Link href="/" className="flex items-center gap-2 group" aria-label="NexEvent Home">
           <Image
-            src="/logo.svg"           // replace with your actual logo file (SVG/PNG)
+            src="/logo.png"           // replace with your actual logo file (SVG/PNG)
             alt="NexEvent logo"
             width={28}
             height={28}
@@ -156,6 +156,7 @@ export default function Navbar() {
             aria-expanded={mobileOpen}
           >
             <FiMenu size={22} />
+
           </button>
         </div>
       </nav>
