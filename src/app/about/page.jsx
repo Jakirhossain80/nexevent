@@ -65,10 +65,10 @@ export default function AboutPage() {
       "
       aria-label="About NexEvent"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-12">
         {/* 1) Hero */}
         <section className="py-16 sm:py-20">
-          <header className="max-w-3xl">
+          <header className="max-w-3xl mb-16">
             <h1
               className="
                 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight
@@ -91,7 +91,7 @@ export default function AboutPage() {
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
               <p
-                className="text-sm sm:text-base text-slate-700 dark:text-slate-200"
+                className="text-sm sm:text-base text-slate-700 dark:text-slate-200 max-w-2xl"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 NexEvent was created by organizers for organizers. We know the pain

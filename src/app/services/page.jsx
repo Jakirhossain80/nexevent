@@ -66,10 +66,10 @@ export default function Services() {
       "
       aria-label="NexEvent Services"
     >
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-12">
         {/* 1) Hero */}
         <section className="py-16 sm:py-20">
-          <header className="max-w-3xl">
+          <header className="max-w-3xl mb-16">
             <h1
               className="
                 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight
@@ -92,7 +92,7 @@ export default function Services() {
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
               <p
-                className="text-sm sm:text-base text-slate-700 dark:text-slate-200"
+                className="text-sm sm:text-base text-slate-700 dark:text-slate-200 max-w-2xl"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 NexEvent streamlines your workflow from creation to insights.
@@ -126,7 +126,7 @@ export default function Services() {
           </div>
         </section>
 
-        
+
 
         {/* 2) Service Highlights */}
         <section className="py-12 sm:py-16 border-t border-gray-200 dark:border-slate-800">

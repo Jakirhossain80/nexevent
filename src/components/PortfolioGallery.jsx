@@ -2,6 +2,21 @@
 
 import { useMemo, useState } from "react";
 import PortfolioCard from "@/components/PortfolioCard";
+import {
+  FaGlobe,
+  FaRegCalendarCheck,
+  FaUsers,
+  FaRegLightbulb,
+} from "react-icons/fa";
+
+// Local map from category key -> Icon component (safe on client)
+const ICON_BY_KEY = {
+  all: FaGlobe,
+  conferences: FaRegCalendarCheck,
+  weddings: FaUsers,
+  concerts: FaRegLightbulb,
+  corporate: FaGlobe,
+};
 
 export default function PortfolioGallery({ items = [], categories = [] }) {
   const [active, setActive] = useState("all");
@@ -15,8 +30,10 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
     <div>
       {/* Filter buttons */}
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-        {categories.map(({ key, label, Icon }) => {
+        {categories.map(({ key, label }) => {
           const selected = active === key;
+          const Icon = ICON_BY_KEY[key] ?? FaGlobe;
+
           return (
             <button
               key={key}
@@ -28,14 +45,15 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
                 ring-1 ring-inset
                 focus:outline-none focus-visible:ring-2
                 transition-all duration-500
-                ${selected
-                  ? "bg-indigo-600 text-white ring-indigo-600 hover:bg-indigo-700 focus-visible:ring-indigo-400"
-                  : "bg-white text-slate-700 ring-gray-200 hover:bg-gray-100 focus-visible:ring-indigo-600 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700"
+                ${
+                  selected
+                    ? "bg-indigo-600 text-white ring-indigo-600 hover:bg-indigo-700 focus-visible:ring-indigo-400"
+                    : "bg-white text-slate-700 ring-gray-200 hover:bg-gray-100 focus-visible:ring-indigo-600 dark:bg-slate-800 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-700"
                 }
               `}
               style={{ fontFamily: "var(--font-inter)" }}
             >
-              {Icon ? <Icon className="h-4 w-4" aria-hidden="true" /> : null}
+              <Icon className="h-4 w-4" aria-hidden="true" />
               {label}
             </button>
           );

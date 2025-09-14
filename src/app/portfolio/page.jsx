@@ -20,14 +20,16 @@ export const metadata = {
   },
 };
 
-// Categories (used for filter UI and icons)
+
 export const CATEGORIES = [
-  { key: "all", label: "All", Icon: FaGlobe },
-  { key: "conferences", label: "Conferences", Icon: FaRegCalendarCheck },
-  { key: "weddings", label: "Weddings", Icon: FaUsers },
-  { key: "concerts", label: "Concerts", Icon: FaRegLightbulb },
-  { key: "corporate", label: "Corporate Events", Icon: FaGlobe },
+  { key: "all", label: "All" },
+  { key: "conferences", label: "Conferences" },
+  { key: "weddings", label: "Weddings" },
+  { key: "concerts", label: "Concerts" },
+  { key: "corporate", label: "Corporate Events" },
 ];
+
+
 
 // Showcase items (images go in /public/portfolio/*)
 export const ITEMS = [
@@ -36,42 +38,42 @@ export const ITEMS = [
     title: "Next.js Summit 2025",
     desc: "A hybrid conference with 2k+ attendees and seamless bookings.",
     category: "conferences",
-    image: "/portfolio/nextjs-summit.jpg",
+    image: "/light1.png",
   },
   {
     id: "p2",
     title: "Coastal Wedding",
     desc: "Intimate ceremony & reception with smooth RSVP flow.",
     category: "weddings",
-    image: "/portfolio/coastal-wedding.jpg",
+    image: "/light2.png",
   },
   {
     id: "p3",
     title: "Open Air Concert",
     desc: "High-volume ticketing with capacity & gate scanning.",
     category: "concerts",
-    image: "/portfolio/openair-concert.jpg",
+    image: "/light3.png",
   },
   {
     id: "p4",
     title: "Global Product Launch",
     desc: "Corporate keynote + regional watch parties with live Q&A.",
     category: "corporate",
-    image: "/portfolio/product-launch.jpg",
+    image: "/light4.png",
   },
   {
     id: "p5",
     title: "Tech Leaders Meetup",
     desc: "Monthly networking with managed invitations.",
     category: "conferences",
-    image: "/portfolio/tech-meetup.jpg",
+    image: "/light5.png",
   },
   {
     id: "p6",
     title: "Charity Concert",
     desc: "Fundraiser with merch pre-orders and VIP tiers.",
     category: "concerts",
-    image: "/portfolio/charity-concert.jpg",
+    image: "/dark4.png",
   },
 ];
 
@@ -82,21 +84,21 @@ const TESTIMONIALS = [
     role: "Community Lead, OpenHub",
     quote:
       "NexEvent handled ticketing and check-ins flawlessly. Our attendees loved the experience.",
-    avatar: "/avatars/ava.png",
+    avatar: "/f3.png",
   },
   {
     name: "Liam Carter",
     role: "Founder, CraftWorks",
     quote:
       "Publishing events and tracking bookings was effortless. Highly recommend for growing teams.",
-    avatar: "/avatars/liam.png",
+    avatar: "/m3.png",
   },
   {
     name: "Maya Patel",
     role: "Program Manager, StartLab",
     quote:
       "Mobile-friendly booking and secure auth made it simple for our audience to join.",
-    avatar: "/avatars/maya.png",
+    avatar: "/f1.png",
   },
 ];
 
@@ -110,10 +112,10 @@ export default function Portfolio() {
       "
       aria-label="NexEvent Portfolio"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-12">
         {/* 1) Hero */}
         <section className="py-16 sm:py-20">
-          <header className="max-w-3xl">
+          <header className="max-w-3xl mb-16">
             <h1
               className="
                 text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight
@@ -136,7 +138,7 @@ export default function Portfolio() {
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
               <p
-                className="text-sm sm:text-base text-slate-700 dark:text-slate-200"
+                className="text-sm sm:text-base text-slate-700 dark:text-slate-200 max-w-2xl"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
                 From conferences to concerts, NexEvent streamlines booking flows,
@@ -147,7 +149,7 @@ export default function Portfolio() {
               {/* Light/Dark illustration swap */}
               <div className="block dark:hidden">
                 <Image
-                  src="/portfolio-hero-light.png"
+                  src="/light3.png"
                   alt="Event highlight collage in light mode"
                   width={1200}
                   height={900}
@@ -157,7 +159,7 @@ export default function Portfolio() {
               </div>
               <div className="hidden dark:block">
                 <Image
-                  src="/portfolio-hero-dark.png"
+                  src="/dark4.png"
                   alt="Event highlight collage in dark mode"
                   width={1200}
                   height={900}
