@@ -1,7 +1,22 @@
+import Features from "@/components/Features";
+import Hero from "@/components/Hero";
+import HowItWorks from "@/components/HowItWorks";
 
 
 export default function Home() {
   return (
-    <div className="text-4xl text-red-500 font-bold">Allah is almighty</div>
+    <>
+    <div>
+      <Hero/>
+    </div>
+    <div>
+      <Features/>
+    </div>
+    <div>
+      <HowItWorks/>
+    </div>
+    
+    
+    </>
   )
 }
