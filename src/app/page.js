@@ -3,6 +3,7 @@ import FAQ from "@/components/FAQ";
 import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
+import Newsletter from "@/components/Newsletter";
 import Pricing from "@/components/Pricing";
 import Showcase from "@/components/Showcase";
 import Testimonials from "@/components/Testimonials";
@@ -38,6 +39,9 @@ export default function Home() {
     </div>
     <div>
       <CTA/>
+    </div>
+    <div>
+      <Newsletter/>
     </div>
     
     
