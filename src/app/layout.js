@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Poppins, Inter } from "next/font/google";
 import Providers from "./providers";
+import Footer from "@/components/Footer";
 
 // Load Google Fonts
 const poppins = Poppins({
@@ -69,6 +70,7 @@ export default function RootLayout({ children }) {
           <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
             {children}
           </main>
+          <Footer/>
         </Providers>
       </body>
     </html>

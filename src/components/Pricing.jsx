@@ -197,13 +197,7 @@ export default function Pricing() {
           ))}
         </ul>
 
-        {/* (Optional) small footnote */}
-        <p
-          className="mt-4 text-xs text-slate-500 dark:text-slate-400"
-          style={{ fontFamily: "var(--font-inter)" }}
-        >
-          Prices shown are examples. You can integrate Stripe later for live billing.
-        </p>
+    
       </div>
     </section>
   );

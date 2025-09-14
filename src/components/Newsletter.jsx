@@ -176,7 +176,7 @@ export default function Newsletter() {
             {/* Light image */}
             <div className="block dark:hidden">
               <Image
-                src="/newsletter-illustration-light.png"
+                src="/light4.png"
                 alt="Newsletter illustration (light)"
                 width={900}
                 height={700}
@@ -187,7 +187,7 @@ export default function Newsletter() {
             {/* Dark image */}
             <div className="hidden dark:block">
               <Image
-                src="/newsletter-illustration-dark.png"
+                src="/dark4.png"
                 alt="Newsletter illustration (dark)"
                 width={900}
                 height={700}

@@ -95,7 +95,7 @@ export default function CTA() {
             {/* Replace /cta-illustration-(light|dark).png with your real assets */}
             <div className="block dark:hidden">
               <Image
-                src="/cta-illustration-light.png"
+                src="/light5.png"
                 alt="Illustration of organizing events with NexEvent"
                 width={900}
                 height={700}
@@ -105,7 +105,7 @@ export default function CTA() {
             </div>
             <div className="hidden dark:block">
               <Image
-                src="/cta-illustration-dark.png"
+                src="/dark5.png"
                 alt="Illustration of organizing events with NexEvent (dark mode)"
                 width={900}
                 height={700}
