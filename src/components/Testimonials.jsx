@@ -1,19 +1,6 @@
-// components/Testimonials.jsx
-// Server Component (no hooks) → SEO-friendly and cacheable (SSR/SSG/ISR)
 import Image from "next/image";
 import { FaStar, FaQuoteLeft } from "react-icons/fa";
 
-/**
- * Testimonials — NexEvent
- * - Dark/Light mode with smooth transitions
- * - Fully responsive (mobile: horizontal snap; desktop: grid)
- * - next/image optimization for avatar assets
- * - Poppins (headings) and Inter (body) via CSS variables defined in app/layout.jsx
- *
- * Customize:
- * - Replace AVATAR_* images with your real images (put them in /public)
- * - Edit the TESTIMONIALS array below (name, role, text, rating, avatar)
- */
 
 const TESTIMONIALS = [
   {
@@ -22,7 +9,7 @@ const TESTIMONIALS = [
     text:
       "NexEvent made our meetup series effortless. From creating events to tracking registrations, everything just flows. Our team saved hours every week.",
     rating: 5,
-    avatar: "/avatars/ava.png",
+    avatar: "/f1.png",
   },
   {
     name: "Liam Carter",
@@ -30,7 +17,7 @@ const TESTIMONIALS = [
     text:
       "The dashboard is clean and powerful. We launched our first paid workshop without a hiccup—bookings and attendee management were a breeze.",
     rating: 5,
-    avatar: "/avatars/liam.png",
+    avatar: "/f2.png",
   },
   {
     name: "Maya Patel",
@@ -38,7 +25,7 @@ const TESTIMONIALS = [
     text:
       "Love the mobile experience and secure login. Our attendees book in seconds, and real-time updates keep our team perfectly in sync.",
     rating: 4,
-    avatar: "/avatars/maya.png",
+    avatar: "/m1.png",
   },
 ];
 
@@ -53,7 +40,7 @@ export default function Testimonials() {
       "
       aria-label="What our clients say about NexEvent"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-20">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Section heading */}
         <header className="max-w-3xl">
           <h2
