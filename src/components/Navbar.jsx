@@ -66,6 +66,7 @@ export default function Navbar() {
             className="select-none"
           />
           <span
+          
             className="
               text-lg sm:text-xl font-semibold
               text-indigo-700 dark:text-indigo-400
