@@ -1,12 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaCalendarCheck, FaUsers, FaTicketAlt, FaChartLine, FaCheckCircle } from "react-icons/fa";
+import {
+  FaCalendarCheck,
+  FaUsers,
+  FaTicketAlt,
+  FaChartLine,
+  FaCheckCircle,
+} from "react-icons/fa";
 
 // Reusable, code-split components
 import ServiceCard from "@/components/ServiceCard";
 import BenefitItem from "@/components/BenefitItem";
-
-
 
 export const metadata = {
   title: "Our Services — NexEvent",
@@ -24,26 +28,22 @@ const SERVICES = [
   {
     icon: FaCalendarCheck,
     title: "Event Creation & Management",
-    desc:
-      "Spin up events in minutes with rich details, capacity controls, scheduling, and publishing workflow designed for clarity.",
+    desc: "Spin up events in minutes with rich details, capacity controls, scheduling, and publishing workflow designed for clarity.",
   },
   {
     icon: FaTicketAlt,
     title: "Booking & Ticketing",
-    desc:
-      "Frictionless booking flow with capacity checks and clear confirmations. Add payments later when you’re ready.",
+    desc: "Frictionless booking flow with capacity checks and clear confirmations. Add payments later when you’re ready.",
   },
   {
     icon: FaUsers,
     title: "Collaboration Tools",
-    desc:
-      "Invite teammates, coordinate roles, and keep everyone aligned in a unified, secure dashboard.",
+    desc: "Invite teammates, coordinate roles, and keep everyone aligned in a unified, secure dashboard.",
   },
   {
     icon: FaChartLine,
     title: "Analytics & Insights",
-    desc:
-      "Track bookings and engagement to learn what works. Make better decisions with simple, actionable metrics.",
+    desc: "Track bookings and engagement to learn what works. Make better decisions with simple, actionable metrics.",
   },
 ];
 
@@ -53,6 +53,8 @@ const BENEFITS = [
   "Accessible UI with robust keyboard support",
   "Scales from small meetups to large conferences",
 ];
+
+
 
 export default function Services() {
   return (
@@ -81,7 +83,8 @@ export default function Services() {
               className="mt-3 text-slate-600 dark:text-slate-300"
               style={{ fontFamily: "var(--font-inter)" }}
             >
-              Everything you need to plan, promote, and manage events—fast, secure, and collaborative.
+              Everything you need to plan, promote, and manage events—fast,
+              secure, and collaborative.
             </p>
           </header>
 
@@ -92,8 +95,10 @@ export default function Services() {
                 className="text-sm sm:text-base text-slate-700 dark:text-slate-200"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                NexEvent streamlines your workflow from creation to insights. Build polished event pages,
-                accept bookings with confidence, and keep your team aligned—while the platform handles the heavy lifting.
+                NexEvent streamlines your workflow from creation to insights.
+                Build polished event pages, accept bookings with confidence, and
+                keep your team aligned—while the platform handles the heavy
+                lifting.
               </p>
             </div>
             <div className="lg:col-span-5">
@@ -121,6 +126,8 @@ export default function Services() {
           </div>
         </section>
 
+        
+
         {/* 2) Service Highlights */}
         <section className="py-12 sm:py-16 border-t border-gray-200 dark:border-slate-800">
           <header className="max-w-3xl">
@@ -137,7 +144,8 @@ export default function Services() {
               className="mt-3 text-slate-600 dark:text-slate-300"
               style={{ fontFamily: "var(--font-inter)" }}
             >
-              A focused set of tools designed to make event operations clear, fast, and reliable.
+              A focused set of tools designed to make event operations clear,
+              fast, and reliable.
             </p>
           </header>
 
@@ -172,11 +180,15 @@ export default function Services() {
               className="mt-3 text-slate-600 dark:text-slate-300"
               style={{ fontFamily: "var(--font-inter)" }}
             >
-              We focus on what matters: speed, security, accessibility, and a delightful UX for organizers and attendees.
+              We focus on what matters: speed, security, accessibility, and a
+              delightful UX for organizers and attendees.
             </p>
           </header>
 
-          <ul className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6" role="list">
+          <ul
+            className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"
+            role="list"
+          >
             {BENEFITS.map((b, i) => (
               <li key={i}>
                 <BenefitItem text={b} />
@@ -210,7 +222,8 @@ export default function Services() {
                 className="mt-2 text-slate-600 dark:text-slate-300"
                 style={{ fontFamily: "var(--font-inter)" }}
               >
-                Head to the dashboard to create your first event or browse what’s happening now.
+                Head to the dashboard to create your first event or browse
+                what’s happening now.
               </p>
             </div>
 
