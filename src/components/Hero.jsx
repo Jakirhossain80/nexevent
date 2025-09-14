@@ -16,7 +16,7 @@ export default function Hero() {
       aria-label="NexEvent Hero"
     >
       {/* Contained layout */}
-      <div className="max-[1680px] mx-auto px-4 sm:px-8 lg:px-12 pt-36 pb-10">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 pt-36 pb-10">
         {/* Grid: content + visual */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Copy column */}
