@@ -26,6 +26,7 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
+    
     <main
       className={`${inter.variable} ${poppins.variable} bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-all duration-500`}
       aria-label="Contact page main content"
@@ -117,4 +118,5 @@ export default function ContactPage() {
       </span>
     </main>
   );
+  
 }
