@@ -32,7 +32,7 @@ export default function ContactPage() {
       aria-label="Contact page main content"
     >
       {/* Hero */}
-      <section className="px-4 sm:px-6 lg:px-8 pt-12 pb-8">
+      <section className="px-4 sm:px-6 lg:px-8 pt-12 py-16 mt-20">
         <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2 items-center">
           <header>
             <h1
@@ -50,7 +50,7 @@ export default function ContactPage() {
           {/* Optimized illustration (optional asset) */}
           <div className="relative h-48 sm:h-56 lg:h-64">
             <Image
-              src="/illustrations/contact-illustration.png"
+              src="/contact-illustration.png"
               alt="Illustration of people collaborating to plan an event"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -118,5 +118,5 @@ export default function ContactPage() {
       </span>
     </main>
   );
-  
+
 }

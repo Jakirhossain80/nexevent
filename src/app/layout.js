@@ -3,15 +3,15 @@ import "./globals.css";
 import { Poppins, Inter } from "next/font/google";
 import Providers from "./providers";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "next-themes";
 
-// Load Google Fonts
+// Fonts (NexEvent: Poppins for headings, Inter for body)
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-poppins",
   display: "swap",
 });
-
 const inter = Inter({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
@@ -37,7 +37,7 @@ export const metadata = {
     title: "NexEvent — Modern Event Management App",
     description:
       "Manage and book events seamlessly with NexEvent. Secure, fast, and responsive — powered by Next.js and MongoDB.",
-    url: "https://nexevent.com", // replace with your actual domain
+    url: "http://localhost:3000/", 
     siteName: "NexEvent",
     images: [
       {
@@ -62,15 +62,26 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${poppins.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${poppins.variable} ${inter.variable}`}
+    >
       <body className="antialiased min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-500">
+        {/* Wrap app with Providers (Auth/Query/etc.) then ThemeProvider to keep SSR/CSR markup consistent */}
         <Providers>
-          <Navbar />
-
-          <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-            {children}
-          </main>
-          <Footer/>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Navbar />
+            <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+              {children}
+            </main>
+            <Footer />
+          </ThemeProvider>
         </Providers>
       </body>
     </html>

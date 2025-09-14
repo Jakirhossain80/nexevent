@@ -1,4 +1,3 @@
-// components/MapSection.jsx
 import Image from "next/image";
 
 export default function MapSection() {
@@ -30,7 +29,7 @@ export default function MapSection() {
       {/* Optional placeholder image example (uses next/image for optimization) */}
       <div className="sr-only">
         <Image
-          src="/images/map-placeholder.jpg"
+          src="/map-placeholder.png"
           alt="Static map placeholder"
           width={1200}
           height={675}
