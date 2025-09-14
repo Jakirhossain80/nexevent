@@ -2,6 +2,7 @@ import Features from "@/components/Features";
 import Hero from "@/components/Hero";
 import HowItWorks from "@/components/HowItWorks";
 import Showcase from "@/components/Showcase";
+import Testimonials from "@/components/Testimonials";
 import WhyChoose from "@/components/WhyChoose";
 
 
@@ -22,6 +23,9 @@ export default function Home() {
     </div>
     <div>
       <HowItWorks/>
+    </div>
+    <div>
+      <Testimonials/>
     </div>
     
     

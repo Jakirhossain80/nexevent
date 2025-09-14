@@ -59,7 +59,7 @@ export default function WhyChoose() {
       "
       aria-label="Why choose NexEvent"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-20">
+      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Heading */}
         <header className="max-w-3xl">
           <h2
