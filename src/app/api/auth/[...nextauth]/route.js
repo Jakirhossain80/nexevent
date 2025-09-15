@@ -6,14 +6,9 @@ import { clientPromise, getDb } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 
-
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
-
-  session: {
-    strategy: "database",
-  },
-
+  session: { strategy: "database" },
   secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
@@ -29,34 +24,54 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const email = credentials?.email?.toLowerCase().trim();
-        const password = credentials?.password ?? "";
-        if (!email || !password) return null;
+        try {
+          const email = credentials?.email?.toLowerCase().trim();
+          const password = credentials?.password ?? "";
+          if (!email || !password) {
+            console.error("[AUTH] Missing email or password in authorize");
+            return null;
+          }
 
-        const db = await getDb();
-        const users = db.collection("users");
-        const user = await users.findOne({ email });
+          const db = await getDb();
+          const users = db.collection("users");
+          const user = await users.findOne({ email });
 
-        // Accept either canonical `passwordHash` or legacy `password`
-        const storedHash = user?.passwordHash || user?.password;
-        if (!user || !storedHash) return null;
+          if (!user) {
+            console.error(`[AUTH] No user found for email: ${email}`);
+            return null;
+          }
 
-        const ok = await bcrypt.compare(password, storedHash);
-        if (!ok) return null;
+          const storedHash = user?.passwordHash || user?.password;
+          if (!storedHash) {
+            console.error(
+              `[AUTH] User ${email} exists but has no password hash (Google-only account?)`
+            );
+            return null;
+          }
 
-        return {
-          id: String(user._id),
-          name: user.name ?? "",
-          email: user.email ?? email,
-          image: user.image ?? null,
-          role: user.role ?? "user",
-        };
+          const ok = await bcrypt.compare(password, storedHash);
+          if (!ok) {
+            console.error(`[AUTH] Password mismatch for user ${email}`);
+            return null;
+          }
+
+          console.log(`[AUTH] Login success for user: ${email}`);
+          return {
+            id: String(user._id),
+            name: user.name ?? "",
+            email: user.email ?? email,
+            image: user.image ?? null,
+            role: user.role ?? "user",
+          };
+        } catch (err) {
+          console.error("[AUTH] Error in authorize:", err);
+          return null;
+        }
       },
     }),
   ],
 
   callbacks: {
-    // Enrich session with stable id/role using database session strategy
     async session({ session, user }) {
       if (session?.user && user) {
         session.user.id = String(user.id || user._id);
@@ -67,11 +82,11 @@ export const authOptions = {
       }
       return session;
     },
-  }, // ← ✅ end callbacks (no stray bracket)
+  },
 
   events: {
-    // Mark provider when a Google user is created
     async createUser({ user }) {
+      console.log("[AUTH] User created:", user.email);
       try {
         const db = await getDb();
         const _id = user?.id ? new ObjectId(user.id) : null;
@@ -81,14 +96,9 @@ export const authOptions = {
             { $set: { provider: "google" } },
             { upsert: false }
           );
-        } else if (user?.email) {
-          await db.collection("users").updateOne(
-            { email: user.email.toLowerCase() },
-            { $set: { provider: "google" } }
-          );
         }
-      } catch {
-        // non-fatal
+      } catch (err) {
+        console.error("[AUTH] Error tagging provider for user:", err);
       }
     },
   },
