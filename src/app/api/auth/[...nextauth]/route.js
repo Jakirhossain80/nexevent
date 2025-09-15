@@ -1,26 +1,25 @@
-// app/api/auth/[...nextauth]/route.js
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import { clientPromise } from "@/lib/mongodb";
-import { connectMongoose } from "@/lib/mongodb";
-import User from "@/models/User";
-import bcrypt from "bcrypt";
+import { clientPromise, getDb } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
+import bcrypt from "bcryptjs";
+
 
 export const authOptions = {
-  adapter: MongoDBAdapter(clientPromise), // users/sessions/accounts in MongoDB
+  adapter: MongoDBAdapter(clientPromise),
+
   session: {
-    strategy: "database", // persist sessions in DB
-    // maxAge: 30 * 24 * 60 * 60, // optional
+    strategy: "database",
   },
+
   secret: process.env.NEXTAUTH_SECRET,
 
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // redirect URIs are inferred from NEXTAUTH_URL
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
 
     CredentialsProvider({
@@ -29,65 +28,70 @@ export const authOptions = {
         email: { label: "Email", type: "email", placeholder: "you@example.com" },
         password: { label: "Password", type: "password" },
       },
-      // Called on signIn('credentials', { email, password })
-      authorize: async (credentials) => {
-        await connectMongoose();
-        const { email, password } = credentials || {};
+      async authorize(credentials) {
+        const email = credentials?.email?.toLowerCase().trim();
+        const password = credentials?.password ?? "";
         if (!email || !password) return null;
 
-        const user = await User.findOne({ email }).lean();
-        if (!user || !user.passwordHash) return null;
+        const db = await getDb();
+        const users = db.collection("users");
+        const user = await users.findOne({ email });
 
-        const ok = await bcrypt.compare(password, user.passwordHash);
+        // Accept either canonical `passwordHash` or legacy `password`
+        const storedHash = user?.passwordHash || user?.password;
+        if (!user || !storedHash) return null;
+
+        const ok = await bcrypt.compare(password, storedHash);
         if (!ok) return null;
 
-        // Minimal user for NextAuth. Must include an "id" string.
         return {
           id: String(user._id),
-          name: user.name || "",
-          email: user.email || "",
-          image: user.image || null,
+          name: user.name ?? "",
+          email: user.email ?? email,
+          image: user.image ?? null,
+          role: user.role ?? "user",
         };
       },
     }),
   ],
 
   callbacks: {
-    // Put minimal profile in the session
+    // Enrich session with stable id/role using database session strategy
     async session({ session, user }) {
-      // "user" here is adapter user when using database strategy
       if (session?.user && user) {
         session.user.id = String(user.id || user._id);
-        session.user.name = user.name || session.user.name;
-        session.user.image = user.image || session.user.image;
-        session.user.email = user.email || session.user.email;
+        session.user.role = user.role || "user";
+        session.user.name = user.name ?? session.user.name ?? "";
+        session.user.email = user.email ?? session.user.email ?? "";
+        session.user.image = user.image ?? session.user.image ?? null;
       }
       return session;
     },
-    // For JWT strategy you'd also implement jwt() to include id.
-  },
+  }, // ← ✅ end callbacks (no stray bracket)
 
   events: {
-    // When a user is created (e.g., first-time Google login)
+    // Mark provider when a Google user is created
     async createUser({ user }) {
-      await connectMongoose();
-      // Ensure provider field is set for Google signups
-      await User.updateOne(
-        { _id: user.id },
-        {
-          $setOnInsert: {
-            name: user.name || "",
-            email: user.email || null,
-            image: user.image || null,
-            provider: "google",
-          },
-        },
-        { upsert: true }
-      );
+      try {
+        const db = await getDb();
+        const _id = user?.id ? new ObjectId(user.id) : null;
+        if (_id) {
+          await db.collection("users").updateOne(
+            { _id },
+            { $set: { provider: "google" } },
+            { upsert: false }
+          );
+        } else if (user?.email) {
+          await db.collection("users").updateOne(
+            { email: user.email.toLowerCase() },
+            { $set: { provider: "google" } }
+          );
+        }
+      } catch {
+        // non-fatal
+      }
     },
   },
-
-  // cookies: { } // (optional) custom cookie names; in prod ensure `__Secure-` on HTTPS
 };
 
 const handler = NextAuth(authOptions);

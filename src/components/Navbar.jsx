@@ -1,10 +1,11 @@
+// components/Navbar.jsx
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react"; // ⬅️ removed signIn import
 import { FiMenu, FiX, FiChevronDown, FiUser, FiLogIn, FiUserPlus } from "react-icons/fi";
 import ThemeToggle from "../components/ThemeToggle";
 
@@ -29,16 +30,11 @@ export default function Navbar() {
   }, [pathname]);
 
   const isActive = (href) =>
-    href === "/"
-      ? pathname === "/"
-      : pathname.startsWith(href);
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   const brandStyle = { fontFamily: "var(--font-poppins)" }; // headings font
-  // Body font (Inter) is already applied globally via layout.jsx
 
-  const filteredLinks = NAV_LINKS.filter((l) =>
-    l.protected ? !!session : true
-  );
+  const filteredLinks = NAV_LINKS.filter((l) => (l.protected ? !!session : true));
 
   return (
     <header
@@ -58,15 +54,14 @@ export default function Navbar() {
         {/* Left: Logo + Brand */}
         <Link href="/" className="flex items-center gap-2 group" aria-label="NexEvent Home">
           <Image
-            src="/logo.png"          
+            src="/logo.png"
             alt="NexEvent logo"
             width={28}
             height={28}
-            priority
+            
             className="select-none"
           />
           <span
-          
             className="
               text-lg sm:text-xl font-semibold
               text-indigo-700 dark:text-indigo-400
@@ -92,9 +87,10 @@ export default function Navbar() {
                     className={`
                       px-3 py-2 rounded-md text-sm font-medium
                       transition-all duration-300
-                      ${active
-                        ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800"
-                        : "text-slate-700 dark:text-slate-200 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+                      ${
+                        active
+                          ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800"
+                          : "text-slate-700 dark:text-slate-200 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-slate-800"
                       }
                     `}
                   >
@@ -116,8 +112,9 @@ export default function Navbar() {
             <UserMenu user={session.user} onSignOut={() => signOut()} />
           ) : (
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => signIn()}
+              {/* ⬇️ Replaced previous login functionality with a Link to /login (route you provided) */}
+              <Link
+                href="/login"
                 className="
                   inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium
                   text-slate-700 dark:text-slate-100
@@ -126,7 +123,8 @@ export default function Navbar() {
                 "
               >
                 <FiLogIn aria-hidden="true" /> Login
-              </button>
+              </Link>
+              {/* ⬇️ Corrected Signup to link to /signup */}
               <Link
                 href="/signup"
                 className="
@@ -157,7 +155,6 @@ export default function Navbar() {
             aria-expanded={mobileOpen}
           >
             <FiMenu size={22} />
-
           </button>
         </div>
       </nav>
@@ -240,12 +237,14 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() => signIn()}
+                {/* ⬇️ Mobile Login now navigates to /login */}
+                <Link
+                  href="/login"
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-slate-100 hover:bg-gray-100 dark:hover:bg-slate-800 transition"
                 >
                   <FiLogIn aria-hidden="true" /> Login
-                </button>
+                </Link>
+                {/* ⬇️ Mobile Signup now navigates to /signup */}
                 <Link
                   href="/signup"
                   className="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition"
@@ -267,9 +266,10 @@ export default function Navbar() {
                     className={`
                       block px-4 py-3 rounded-md text-sm font-medium
                       transition-all duration-300
-                      ${active
-                        ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800"
-                        : "text-slate-700 dark:text-slate-200 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-slate-800"
+                      ${
+                        active
+                          ? "text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-slate-800"
+                          : "text-slate-700 dark:text-slate-200 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-gray-100 dark:hover:bg-slate-800"
                       }
                     `}
                   >

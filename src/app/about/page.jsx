@@ -271,7 +271,7 @@ export default function AboutPage() {
                       fill
                       sizes="112px"
                       className="object-cover"
-                      priority={idx < 2} // lightly prioritize top-left images
+                    
                     />
                   </div>
                   <h3

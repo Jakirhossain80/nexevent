@@ -90,7 +90,7 @@ export default function Hero() {
                 alt="NexEvent dashboard preview in light mode"
                 width={1200}
                 height={900}
-                priority
+              
                 className="w-full h-auto rounded-2xl shadow-lg ring-1 ring-black/5"
               />
             </div>
@@ -101,7 +101,7 @@ export default function Hero() {
                 alt="NexEvent dashboard preview in dark mode"
                 width={1200}
                 height={900}
-                priority
+              
                 className="w-full h-auto rounded-2xl shadow-xl ring-1 ring-white/10"
               />
             </div>

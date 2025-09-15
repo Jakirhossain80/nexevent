@@ -121,7 +121,7 @@ export default function Testimonials() {
                       fill
                       sizes="56px"
                       className="object-cover"
-                      priority={idx === 0} /* prioritize first card for LCP */
+                    
                     />
                   </div>
 

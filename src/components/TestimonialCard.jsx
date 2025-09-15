@@ -20,7 +20,7 @@ export default function TestimonialCard({ name, role, quote, avatar, priority = 
             fill
             sizes="56px"
             className="object-cover"
-            priority={priority}
+           
           />
         </div>
         <div className="min-w-0">

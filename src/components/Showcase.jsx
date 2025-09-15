@@ -129,7 +129,7 @@ export default function Showcase() {
                       width={1200}
                       height={800}
                       className="w-full h-auto object-cover"
-                      priority={idx < 2} /* prioritize a couple for LCP */
+                     
                     />
                   </div>
                   {/* Dark image */}
@@ -140,7 +140,7 @@ export default function Showcase() {
                       width={1200}
                       height={800}
                       className="w-full h-auto object-cover"
-                      priority={idx < 2}
+                     
                     />
                   </div>
 
