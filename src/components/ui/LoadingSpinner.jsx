@@ -1,4 +1,3 @@
-// src/components/ui/LoadingSpinner.jsx
 "use client";
 
 import React from "react";
