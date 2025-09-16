@@ -1,86 +1,101 @@
+// src/app/api/events/[id]/route.js
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
-export async function GET(_req, { params }) {
+// Safely convert to ObjectId
+function toObjectId(id) {
   try {
-    const db = await getDb();
-    const _id = new ObjectId(params.id);
-    const event = await db.collection("events").findOne({ _id });
-    if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    return NextResponse.json(event);
-  } catch (err) {
-    console.error("[API /events/:id GET] error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+    return new ObjectId(id);
+  } catch {
+    return null;
   }
 }
 
-export async function PATCH(req, { params }) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+/**
+ * GET /api/events/:id
+ * Public (or protect if needed). Returns a single event.
+ */
+export async function GET(req, ctx) {
+  // ✅ await params
+  const { id } = await ctx.params;
+  const _id = toObjectId(id);
+  if (!_id) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
-    const db = await getDb();
-    const _id = new ObjectId(params.id);
+  const db = await getDb();
+  const event = await db.collection("events").findOne({ _id });
+  if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-    const existing = await db.collection("events").findOne({ _id });
-    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    if (existing.ownerId !== session.user.id) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    const body = await req.json();
-    const patch = {
-      title: body.title !== undefined ? String(body.title).trim() : existing.title,
-      description: body.description !== undefined ? String(body.description) : existing.description,
-      city: body.city !== undefined ? String(body.city) : existing.city,
-      venue: body.venue !== undefined ? String(body.venue) : existing.venue,
-      coverImage: body.coverImage !== undefined ? String(body.coverImage || "") || null : existing.coverImage,
-      tags: Array.isArray(body.tags) ? body.tags : existing.tags,
-      capacity: body.capacity !== undefined ? Math.max(0, Number(body.capacity || 0)) : existing.capacity,
-      price: body.price !== undefined ? Math.max(0, Number(body.price || 0)) : existing.price,
-      visibility: body.visibility === "private" ? "private" : body.visibility === "public" ? "public" : existing.visibility,
-      status: ["draft", "published", "archived"].includes(body.status) ? body.status : existing.status,
-      startAt: body.startAt ? new Date(body.startAt) : existing.startAt,
-      endAt: body.endAt ? new Date(body.endAt) : existing.endAt,
-      updatedAt: new Date(),
-    };
-
-    // Basic validation
-    if (!patch.title || Number.isNaN(+patch.startAt) || Number.isNaN(+patch.endAt)) {
-      return NextResponse.json({ error: "Title and valid dates are required" }, { status: 400 });
-    }
-
-    await db.collection("events").updateOne({ _id }, { $set: patch });
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("[API /events/:id PATCH] error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
-  }
+  return NextResponse.json(event);
 }
 
-export async function DELETE(_req, { params }) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-    const db = await getDb();
-    const _id = new ObjectId(params.id);
-    const existing = await db.collection("events").findOne({ _id });
-    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
-    if (existing.ownerId !== session.user.id) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    await db.collection("events").deleteOne({ _id });
-    // optional cascade:
-    await db.collection("bookings").deleteMany({ eventId: _id });
-
-    return NextResponse.json({ ok: true });
-  } catch (err) {
-    console.error("[API /events/:id DELETE] error:", err);
-    return NextResponse.json({ error: "Server error" }, { status: 500 });
+/**
+ * PATCH /api/events/:id
+ * Auth required. Only the owner can update.
+ */
+export async function PATCH(req, ctx) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // ✅ await params
+  const { id } = await ctx.params;
+  const _id = toObjectId(id);
+  if (!_id) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+  const db = await getDb();
+  const existing = await db.collection("events").findOne({ _id });
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (existing.ownerId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const body = await req.json();
+
+  const $set = {
+    ...(body.title !== undefined ? { title: String(body.title) } : {}),
+    ...(body.description !== undefined ? { description: String(body.description) } : {}),
+    ...(body.venue !== undefined ? { venue: String(body.venue) } : {}),
+    ...(body.city !== undefined ? { city: String(body.city) } : {}),
+    ...(body.startAt !== undefined ? { startAt: new Date(body.startAt) } : {}),
+    ...(body.endAt !== undefined ? { endAt: new Date(body.endAt) } : {}),
+    ...(body.capacity !== undefined ? { capacity: Number(body.capacity) } : {}),
+    ...(body.price !== undefined ? { price: Number(body.price) } : {}),
+    ...(body.visibility !== undefined ? { visibility: String(body.visibility) } : {}),
+    updatedAt: new Date(),
+  };
+
+  await db.collection("events").updateOne({ _id }, { $set });
+  return NextResponse.json({ ok: true });
+}
+
+/**
+ * DELETE /api/events/:id
+ * Auth required. Only the owner can delete.
+ */
+export async function DELETE(req, ctx) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // ✅ await params
+  const { id } = await ctx.params;
+  const _id = toObjectId(id);
+  if (!_id) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+
+  const db = await getDb();
+  const existing = await db.collection("events").findOne({ _id });
+  if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  if (existing.ownerId !== session.user.id) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  await db.collection("events").deleteOne({ _id });
+  return NextResponse.json({ ok: true });
 }
