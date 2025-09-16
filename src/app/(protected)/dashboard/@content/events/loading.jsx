@@ -1,1 +1,10 @@
-<h2>Loading</h2>
+import LoadingSpinner from '@/components/ui/LoadingSpinner'
+
+
+export default function loading() {
+  return (
+    <div>
+        <LoadingSpinner/>
+    </div>
+  )
+}

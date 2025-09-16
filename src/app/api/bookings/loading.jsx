@@ -1,7 +1,10 @@
-import React from 'react'
+import LoadingSpinner from '@/components/ui/LoadingSpinner'
+
 
 export default function loading() {
   return (
-    <div>loading</div>
+    <div>
+        <LoadingSpinner/>
+    </div>
   )
 }
