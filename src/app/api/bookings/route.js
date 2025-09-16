@@ -1,4 +1,4 @@
-// src/app/api/bookings/route.js  (GET list mine, POST create)
+// src/app/api/bookings/route.js
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
@@ -29,7 +29,7 @@ export async function POST(req) {
   const eventId = new ObjectId(String(body.eventId));
   const qty = Math.max(1, Number(body.quantity || 1));
 
-  // atomic capacity check: only update if seats available
+  // Atomic capacity check
   const event = await db.collection("events").findOneAndUpdate(
     {
       _id: eventId,
@@ -38,10 +38,7 @@ export async function POST(req) {
     { $inc: { seatsBooked: qty } },
     { returnDocument: "after" }
   );
-
-  if (!event.value) {
-    return NextResponse.json({ error: "Event full or not found" }, { status: 400 });
-  }
+  if (!event.value) return NextResponse.json({ error: "Event full or not found" }, { status: 400 });
 
   const amount = (event.value.price || 0) * qty;
   const doc = {

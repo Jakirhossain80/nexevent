@@ -1,3 +1,4 @@
+// src/app/api/bookings/[id]/route.js
 import { NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getDb } from "@/lib/mongodb";
