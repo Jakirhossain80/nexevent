@@ -1,7 +1,10 @@
-import React from 'react'
+import ErrorState from '@/components/ui/ErrorState'
+
 
 export default function error() {
   return (
-    <div>error</div>
+    <div>
+        <ErrorState/>
+    </div>
   )
 }
