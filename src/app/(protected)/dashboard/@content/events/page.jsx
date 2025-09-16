@@ -1,4 +1,3 @@
-// src/app/(protected)/dashboard/@content/events/page.jsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getDb } from "@/lib/mongodb";

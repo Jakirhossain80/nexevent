@@ -1,3 +1,4 @@
+// src/app/layout.jsx
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 import { Poppins, Inter } from "next/font/google";
@@ -37,7 +38,7 @@ export const metadata = {
     title: "NexEvent — Modern Event Management App",
     description:
       "Manage and book events seamlessly with NexEvent. Secure, fast, and responsive — powered by Next.js and MongoDB.",
-    url: "http://localhost:3000/", 
+    url: "http://localhost:3000/",
     siteName: "NexEvent",
     images: [
       {
@@ -55,12 +56,12 @@ export const metadata = {
     title: "NexEvent — Modern Event Management App",
     description:
       "NexEvent is a full-stack platform to create, manage, and book events. Modern, fast, and secure.",
-    images: ["https://nexevent.com/twitter-image.png"], // replace with actual
-    creator: "@YourTwitterHandle", // optional
+    images: ["https://nexevent.com/twitter-image.png"],
+    creator: "@YourTwitterHandle",
   },
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children, modal }) {
   return (
     <html
       lang="en"
@@ -80,6 +81,10 @@ export default function RootLayout({ children }) {
             <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
               {children}
             </main>
+
+            {/* Render the parallel route slot so modals (e.g., @modal) can appear above pages */}
+            {modal}
+
             <Footer />
           </ThemeProvider>
         </Providers>
