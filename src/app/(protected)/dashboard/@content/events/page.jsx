@@ -1,15 +1,22 @@
-// src/app/(protected)/dashboard/@content/events/page.jsx
 "use client";
 
 import { useMemo, useState } from "react";
-import { useQuery, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  useQuery,
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import Link from "next/link";
 
 function EventsList() {
   const [page, setPage] = useState(1);
   const [q, setQ] = useState("");
+  const [deletingId, setDeletingId] = useState(null);
 
   const key = useMemo(() => ["events", { mine: 1, page, q }], [page, q]);
+  const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery({
     queryKey: key,
@@ -25,10 +32,34 @@ function EventsList() {
     },
   });
 
+  // Delete mutation (unchanged)
+  const { mutate: deleteEvent } = useMutation({
+    mutationFn: async (id) => {
+      const res = await fetch(`/api/events/${id}`, { method: "DELETE" });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json?.error || "Failed to delete event");
+      return true;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+    onSettled: () => setDeletingId(null),
+  });
+
+  function onDelete(id, title) {
+    if (confirm(`Delete "${title}"? This cannot be undone.`)) {
+      setDeletingId(id);
+      deleteEvent(id);
+    }
+  }
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold text-slate-800 dark:text-slate-100" style={{ fontFamily: "var(--font-poppins)" }}>
+        <h1
+          className="text-2xl font-semibold text-slate-800 dark:text-slate-100"
+          style={{ fontFamily: "var(--font-poppins)" }}
+        >
           My Events
         </h1>
         <Link
@@ -70,17 +101,41 @@ function EventsList() {
                     {new Date(ev.startAt).toLocaleString()}
                   </p>
                 </div>
-                <Link
-                  href={`/dashboard/events/${ev._id}`}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm"
-                >
-                  Edit
-                </Link>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2">
+                  {/* FIX: point View to an existing route.
+                     Your app doesn't have /events/[id] (404). 
+                     Route the "View" action to the dashboard detail page. */}
+                  <Link
+                    href={`/dashboard/events/${ev._id}?mode=view`}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm"
+                  >
+                    View
+                  </Link>
+
+                  <Link
+                    href={`/dashboard/events/${ev._id}`}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm"
+                  >
+                    Edit
+                  </Link>
+
+                  <button
+                    onClick={() => onDelete(ev._id, ev.title)}
+                    disabled={deletingId === ev._id}
+                    className="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 disabled:opacity-60 text-white text-sm transition-colors"
+                  >
+                    {deletingId === ev._id ? "Deleting…" : "Delete"}
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-slate-500 dark:text-slate-400">No events yet. Create your first one!</p>
+          <p className="text-slate-500 dark:text-slate-400">
+            No events yet. Create your first one!
+          </p>
         )}
       </div>
 
