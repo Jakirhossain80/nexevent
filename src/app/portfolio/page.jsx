@@ -31,6 +31,7 @@ export const CATEGORIES = [
 
 
 
+
 // Showcase items (images go in /public/portfolio/*)
 export const ITEMS = [
   {
