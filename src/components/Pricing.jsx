@@ -1,204 +1,242 @@
-import Link from "next/link";
-import { FiCheckCircle } from "react-icons/fi";
+"use client";
+
+import { Poppins, Inter } from "next/font/google";
+import { FiCheck, FiZap, FiStar, FiShield } from "react-icons/fi";
+import clsx from "clsx";
 
 
-const PLANS = [
+
+// Load project fonts (one-time per bundle) — these become CSS variables we can use in className
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+
+const defaultPlans = [
   {
+    id: "basic",
     name: "Basic",
     price: "$0",
-    period: "/mo",
-    highlight: false,
+    cadence: "/month",
+    tagline: "Kickstart your first events",
+    icon: <FiShield aria-hidden="true" />,
+    featured: false,
+    cta: { label: "Get Started", href: "/signup" },
     features: [
       "Create up to 3 events",
-      "Email support",
       "Basic analytics",
-      "Community access",
+      "Community support",
+      "Standard booking flow",
     ],
-    ctaHref: "/signup",
-    ctaText: "Get Started",
   },
   {
+    id: "standard",
     name: "Standard",
     price: "$19",
-    period: "/mo",
-    highlight: true, // ← Most Popular
+    cadence: "/month",
+    tagline: "Best for growing organizers",
+    icon: <FiStar aria-hidden="true" />,
+    // Highlight this plan as “Most Popular”
+    featured: true,
+    cta: { label: "Start Standard", href: "/signup?plan=standard" },
     features: [
       "Unlimited events",
+      "Advanced analytics & exports",
       "Priority email support",
-      "Advanced analytics",
-      "Custom branding",
-      "CSV export",
+      "Discount codes & coupons",
+      "Custom booking form fields",
     ],
-    ctaHref: "/signup",
-    ctaText: "Start Standard",
   },
   {
+    id: "premium",
     name: "Premium",
     price: "$49",
-    period: "/mo",
-    highlight: false,
+    cadence: "/month",
+    tagline: "Scale with pro tools & support",
+    icon: <FiZap aria-hidden="true" />,
+    featured: false,
+    cta: { label: "Go Premium", href: "/signup?plan=premium" },
     features: [
-      "Everything in Standard",
+      "All Standard features",
       "Team roles & permissions",
       "Webhooks & API access",
-      "SLA & dedicated support",
-      "Early feature access",
+      "SLA & dedicated success manager",
+      "Priority chat support",
     ],
-    ctaHref: "/contact", // maybe enterprise contact
-    ctaText: "Talk to Sales",
   },
 ];
 
-export default function Pricing() {
+export default function Pricing({ plans = defaultPlans }) {
   return (
     <section
-      id="pricing"
-      className="
-        bg-gray-50 text-slate-800
-        dark:bg-slate-900 dark:text-slate-100
-        transition-all duration-500
-      "
-      aria-label="NexEvent pricing plans"
+      aria-labelledby="pricing-heading"
+      className={clsx(
+        "w-full",
+        poppins.variable,
+        inter.variable,
+        // Section background adapts to theme
+        "bg-gray-50 dark:bg-slate-900 transition-all duration-500 w-full"
+      )}
     >
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
-        {/* Section Heading */}
-        <header className="max-w-3xl">
+      <div className="mx-auto max-w-[1680px] px-4 sm:px-6 lg:px-8 py-16">
+        {/* Heading */}
+        <div className="text-center max-w-2xl mx-auto">
           <h2
-            className="
-              text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
-              text-indigo-700 dark:text-indigo-300
-            "
-            style={{ fontFamily: "var(--font-poppins)" }} // Poppins (headings)
+            id="pricing-heading"
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100"
+            style={{ fontFamily: "var(--font-poppins)" }}
           >
             Our Pricing Plans
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
-            style={{ fontFamily: "var(--font-inter)" }} // Inter (body)
+            style={{ fontFamily: "var(--font-inter)" }}
           >
-            Choose a plan that grows with your events. Upgrade anytime — all plans
-            include fast performance, secure auth, and a modern dashboard.
+            Choose a plan that fits your event goals. Upgrade anytime as your audience grows.
           </p>
-        </header>
+        </div>
 
-        {/* Plans Grid */}
-        <ul
-          className="
-            mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3
-            gap-4 sm:gap-6 lg:gap-8
-          "
-          role="list"
-        >
-          {PLANS.map((plan, idx) => (
-            <li key={idx}>
-              <article
-                className={`
-                  relative h-full rounded-2xl
-                  border ${plan.highlight ? "border-indigo-300 dark:border-indigo-400/50" : "border-gray-200 dark:border-slate-800"}
-                  bg-white dark:bg-slate-800
-                  shadow-sm hover:shadow-md
-                  transition-all duration-500
-                  hover:-translate-y-0.5 hover:scale-[1.01]
-                  ${plan.highlight ? "ring-1 ring-inset ring-indigo-200/70 dark:ring-indigo-400/20" : ""}
-                `}
-                aria-label={`${plan.name} plan`}
-              >
-                {/* Badge for Most Popular */}
-                {plan.highlight && (
+        {/* Grid of plans */}
+        {/* Mobile: stacked; Tablet: 2 columns; Desktop: 3 columns */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-8 md:gap-x-12 lg:gap-x-24 ">
+          {plans.map((plan) => (
+            <article
+              key={plan.id}
+              className={clsx(
+                "relative rounded-2xl border overflow-hidden",
+                // Card border adapts to theme
+                "border-slate-200 dark:border-slate-800",
+                // Smooth transitions & subtle hover elevation
+                "bg-white dark:bg-slate-800 shadow-sm hover:shadow-md transition-all duration-500",
+                // Slight scale on hover for desktop
+                "hover:scale-[1.01]"
+              )}
+            >
+              {/* Featured Ribbon */}
+              {plan.featured && (
+                <div
+                  className={clsx(
+                    "absolute top-0 right-0 rounded-bl-2xl px-3 py-1 text-xs font-semibold",
+                    // Use Emerald-500 as an accent per NexEvent system
+                    "bg-emerald-500 text-white"
+                  )}
+                  aria-label="Most popular plan"
+                >
+                  Most Popular
+                </div>
+              )}
+
+              {/* Card content */}
+              <div className="p-6">
+                {/* Icon & plan title */}
+                <div className="flex items-center gap-3">
                   <div
-                    className="
-                      absolute -top-3 left-1/2 -translate-x-1/2
-                      rounded-full px-3 py-1 text-xs font-medium
-                      bg-indigo-600 text-white
-                      shadow-sm
-                    "
-                    style={{ fontFamily: "var(--font-inter)" }}
+                    className={clsx(
+                      "inline-flex items-center justify-center w-10 h-10 rounded-xl",
+                      // Primary indigo gradient for visual punch
+                      "bg-gradient-to-br from-indigo-600 to-indigo-700 text-white"
+                    )}
+                    aria-hidden="true"
                   >
-                    Most Popular
+                    {plan.icon}
                   </div>
-                )}
-
-                {/* Card content */}
-                <div className="p-6 sm:p-7">
-                  {/* Plan Header */}
-                  <h3
-                    className="text-lg sm:text-xl font-semibold"
-                    style={{ fontFamily: "var(--font-poppins)" }}
-                  >
-                    {plan.name} Plan
-                  </h3>
-
-                  <div className="mt-2 flex items-baseline gap-1">
-                    <span
-                      className="text-3xl sm:text-4xl font-semibold text-indigo-700 dark:text-indigo-300"
+                  <div>
+                    <h3
+                      className="text-lg font-semibold text-slate-800 dark:text-slate-100"
                       style={{ fontFamily: "var(--font-poppins)" }}
                     >
-                      {plan.price}
-                    </span>
-                    <span
-                      className="text-slate-500 dark:text-slate-400"
-                      style={{ fontFamily: "var(--font-inter)" }}
-                    >
-                      {plan.period}
-                    </span>
-                  </div>
-
-                  {/* Features */}
-                  <ul className="mt-5 space-y-3">
-                    {plan.features.map((f, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <span
-                          className="
-                            mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center
-                            rounded-full bg-emerald-500/10 text-emerald-600
-                            dark:bg-emerald-400/10 dark:text-emerald-400
-                            transition-all duration-500
-                          "
-                          aria-hidden="true"
-                          title="Included"
-                        >
-                          <FiCheckCircle className="h-4 w-4" />
-                        </span>
-                        <p
-                          className="text-sm sm:text-base text-slate-700 dark:text-slate-200"
-                          style={{ fontFamily: "var(--font-inter)" }}
-                        >
-                          {f}
-                        </p>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA */}
-                  <div className="mt-6">
-                    <Link
-                      href={plan.ctaHref}
-                      aria-label={`${plan.ctaText} for ${plan.name} plan`}
-                      className={`
-                        inline-flex w-full items-center justify-center gap-2
-                        rounded-lg px-5 py-3 text-sm sm:text-base font-medium
-                        transition-all duration-500
-                        focus:outline-none focus-visible:ring-2
-                        focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-900
-                        ${
-                          plan.highlight
-                            ? "text-white bg-indigo-600 hover:bg-indigo-700 focus-visible:ring-indigo-600 dark:focus-visible:ring-indigo-400"
-                            : "text-indigo-700 bg-indigo-50 hover:bg-indigo-100 dark:text-indigo-300 dark:bg-slate-700 dark:hover:bg-slate-600 focus-visible:ring-indigo-600 dark:focus-visible:ring-indigo-400"
-                        }
-                      `}
-                      style={{ fontFamily: "var(--font-inter)" }}
-                    >
-                      {plan.ctaText}
-                    </Link>
+                      {plan.name}
+                    </h3>
+                    {plan.tagline && (
+                      <p
+                        className="text-sm text-slate-500 dark:text-slate-400"
+                        style={{ fontFamily: "var(--font-inter)" }}
+                      >
+                        {plan.tagline}
+                      </p>
+                    )}
                   </div>
                 </div>
-              </article>
-            </li>
-          ))}
-        </ul>
 
-    
+                {/* Price */}
+                <div className="mt-6 flex items-baseline gap-1">
+                  <span
+                    className={clsx(
+                      "text-3xl font-extrabold",
+                      // Price color pops with primary palette
+                      plan.featured
+                        ? "text-indigo-700 dark:text-indigo-300"
+                        : "text-slate-800 dark:text-slate-100"
+                    )}
+                    style={{ fontFamily: "var(--font-poppins)" }}
+                  >
+                    {plan.price}
+                  </span>
+                  <span
+                    className="text-sm text-slate-500 dark:text-slate-400"
+                    style={{ fontFamily: "var(--font-inter)" }}
+                  >
+                    {plan.cadence}
+                  </span>
+                </div>
+
+                {/* Features */}
+                <ul className="mt-6 space-y-2">
+                  {plan.features.map((feat, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <FiCheck
+                        className="mt-0.5 shrink-0 text-emerald-500"
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="text-sm text-slate-700 dark:text-slate-300"
+                        style={{ fontFamily: "var(--font-inter)" }}
+                      >
+                        {feat}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                <div className="mt-8">
+                  <a
+                    href={plan.cta?.href || "/signup"}
+                    className={clsx(
+                      "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus-visible:ring-2 transition-all duration-500",
+                      // Button colors use primary indigo with hover; featured is stronger
+                      plan.featured
+                        ? "bg-indigo-600 hover:bg-indigo-700 text-white focus-visible:ring-indigo-500"
+                        : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 focus-visible:ring-slate-400"
+                    )}
+                    aria-label={`Select the ${plan.name} plan`}
+                    style={{ fontFamily: "var(--font-inter)" }}
+                  >
+                    {plan.cta?.label || "Get Started"}
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {/* Small note about billing or FAQs link (optional) */}
+        <p
+          className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400"
+          style={{ fontFamily: "var(--font-inter)" }}
+        >
+          Prices shown in USD. You can change or cancel your plan anytime.
+        </p>
       </div>
     </section>
   );
 }
+

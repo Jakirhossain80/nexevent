@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FiCalendar,
   FiBell,
@@ -6,7 +8,9 @@ import {
   FiLogIn,
   FiSmartphone,
 } from "react-icons/fi";
-
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const FEATURES = [
   {
@@ -48,6 +52,16 @@ const FEATURES = [
 ];
 
 export default function Features() {
+  // Initialize AOS on client side following Next.js best practices
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 40,
+      once: true,
+    });
+  }, []);
+
   return (
     <section
       id="features"
@@ -57,22 +71,27 @@ export default function Features() {
         transition-all duration-500
       "
       aria-label="NexEvent features"
+      data-aos="fade-in"
     >
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Section Title & Description */}
-        <header className="max-w-3xl">
+        <header className="max-w-3xl" data-aos="fade-up" data-aos-delay="50">
           <h2
             className="
               text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
               text-indigo-700 dark:text-indigo-300
             "
             style={{ fontFamily: "var(--font-poppins)" }} // Poppins for headings
+            data-aos="fade-right"
+            data-aos-delay="120"
           >
             Powerful Features for Seamless Event Management
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} // Inter for body
+            data-aos="fade-up"
+            data-aos-delay="180"
           >
             NexEvent streamlines every step, from creating and promoting your event
             to handling bookings and tracking results—all in one modern, secure platform.
@@ -86,6 +105,8 @@ export default function Features() {
             gap-4 sm:gap-6 lg:gap-8
           "
           role="list"
+          data-aos="fade-up"
+          data-aos-delay="120"
         >
           {FEATURES.map(({ icon: Icon, title, desc }, idx) => (
             <li key={idx}>
@@ -98,6 +119,8 @@ export default function Features() {
                   hover:shadow-md hover:-translate-y-0.5
                   focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
                 "
+                data-aos="zoom-in"
+                data-aos-delay={140 + idx * 80}
               >
                 <div className="flex items-start gap-4">
                   {/* Icon badge (decorative) */}
@@ -112,6 +135,8 @@ export default function Features() {
                       shrink-0
                     "
                     aria-hidden="true"
+                    data-aos="zoom-in"
+                    data-aos-delay={160 + idx * 80}
                   >
                     <Icon size={22} />
                   </span>
@@ -120,12 +145,16 @@ export default function Features() {
                     <h3
                       className="text-base sm:text-lg font-semibold leading-snug"
                       style={{ fontFamily: "var(--font-poppins)" }}
+                      data-aos="fade-up"
+                      data-aos-delay={200 + idx * 80}
                     >
                       {title}
                     </h3>
                     <p
                       className="mt-1 text-sm sm:text-base text-slate-600 dark:text-slate-300"
                       style={{ fontFamily: "var(--font-inter)" }}
+                      data-aos="fade-up"
+                      data-aos-delay={240 + idx * 80}
                     >
                       {desc}
                     </p>
