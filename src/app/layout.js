@@ -38,7 +38,7 @@ export const metadata = {
     title: "NexEvent — Modern Event Management App",
     description:
       "Manage and book events seamlessly with NexEvent. Secure, fast, and responsive — powered by Next.js and MongoDB.",
-    url: "http://localhost:3000/",
+    url: "https://nexevent-two.vercel.app/",
     siteName: "NexEvent",
     images: [
       {
