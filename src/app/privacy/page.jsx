@@ -9,9 +9,9 @@ export default function PrivacyPage() {
     <main
       className="min-h-screen bg-gray-50 dark:bg-slate-900 
                  text-slate-800 dark:text-slate-100 
-                 transition-all duration-500 px-6 py-12"
+                 transition-all duration-500 px-6 py-28"
     >
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h1
           className="text-3xl font-semibold text-indigo-700 dark:text-indigo-300"
           style={{ fontFamily: "var(--font-poppins)" }}
