@@ -15,7 +15,8 @@ export default function middleware(req) {
     pathname === "/sitemap.xml" ||
     pathname.startsWith("/api/auth") ||
     pathname.startsWith("/api/public")
-  ) return NextResponse.next();
+  )
+    return NextResponse.next();
 
   if (pathname.startsWith("/dashboard")) return authMiddleware(req);
   return NextResponse.next();

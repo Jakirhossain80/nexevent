@@ -10,12 +10,7 @@ import bcrypt from "bcryptjs";
 // Ensure Node runtime (Mongoose/native driver & NextAuth need Node, not Edge)
 export const runtime = "nodejs";
 
-/**
- * NextAuth configuration for NexEvent
- * - Uses MongoDBAdapter for Users/Accounts (OAuth linking etc.)
- * - Uses JWT sessions (middleware-compatible & fast in serverless)
- * - Supports Google OAuth and Credentials (email + passwordHash stored in DB)
- */
+
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
 
@@ -24,6 +19,8 @@ export const authOptions = {
 
   // ✅ Custom sign-in page
   pages: { signIn: "/login" },
+  trustHost: true, 
+  debug: process.env.NODE_ENV === "development",
 
   // ✅ Required secret
   secret: process.env.NEXTAUTH_SECRET,
