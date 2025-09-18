@@ -4,11 +4,20 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 
+// Ensure this page runs on the Node.js runtime (Mongoose/NextAuth need Node, not Edge)
+export const runtime = "nodejs";
+
+// Avoid any caching/flicker for auth-aware content
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  // ✅ With session strategy: "jwt" and a proper authOptions export, this will return the session
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/login?callbackUrl=/dashboard");
+
+  // If there is no session, send the user to login with a callback back to /dashboard
+  if (!session) {
+    redirect("/login?callbackUrl=/dashboard");
+  }
 
   const name = session.user?.name || session.user?.email || "there";
 

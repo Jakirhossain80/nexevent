@@ -7,23 +7,35 @@ import { clientPromise, getDb } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 
-// ✅ Use the adapter for users/accounts (Google linking, etc.)
-// ✅ Use JWT sessions for reliability in serverless (no DB lookups per request)
+// Ensure Node runtime (Mongoose/native driver & NextAuth need Node, not Edge)
+export const runtime = "nodejs";
+
+/**
+ * NextAuth configuration for NexEvent
+ * - Uses MongoDBAdapter for Users/Accounts (OAuth linking etc.)
+ * - Uses JWT sessions (middleware-compatible & fast in serverless)
+ * - Supports Google OAuth and Credentials (email + passwordHash stored in DB)
+ */
 export const authOptions = {
   adapter: MongoDBAdapter(clientPromise),
+
+  // ✅ Middleware-compatible session strategy
   session: { strategy: "jwt" },
+
+  // ✅ Custom sign-in page
+  pages: { signIn: "/login" },
+
+  // ✅ Required secret
   secret: process.env.NEXTAUTH_SECRET,
 
-  pages: {
-    signIn: "/login", // your custom login page
-  },
-
   providers: [
+    // --- Google OAuth ---
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
 
+    // --- Email + Password (Credentials) ---
     Credentials({
       name: "Credentials",
       credentials: {
@@ -39,20 +51,21 @@ export const authOptions = {
           const db = await getDb();
           const users = db.collection("users");
 
-          // Find a credentials user. (Google users typically have no passwordHash)
+          // Find the user by email
           const user = await users.findOne({ email });
           if (!user) return null;
 
-          const storedHash = user.passwordHash || user.password; // support legacy 'password'
+          // Prefer passwordHash (MVP schema), fallback to legacy `password`
+          const storedHash = user.passwordHash || user.password;
           if (!storedHash) {
-            // likely a Google-only account
+            // Likely an OAuth-only account (no password set)
             return null;
           }
 
           const ok = await bcrypt.compare(password, storedHash);
           if (!ok) return null;
 
-          // Minimal safe object; NEVER include password fields
+          // Return a safe, minimal user object (never include password fields)
           return {
             id: String(user._id),
             name: user.name || email,
@@ -70,9 +83,11 @@ export const authOptions = {
   ],
 
   callbacks: {
-    // Called when a JWT is created/updated
+    /**
+     * Put user/account info onto the token when a session is created/updated.
+     * Runs on sign-in and subsequent token refreshes.
+     */
     async jwt({ token, user, account }) {
-      // On first sign in, attach user fields to the token
       if (user) {
         token.id = user.id;
         token.name = user.name || token.name;
@@ -84,7 +99,10 @@ export const authOptions = {
       return token;
     },
 
-    // Make session.user contain our minimal profile (from token)
+    /**
+     * Expose only the necessary fields on the session object.
+     * This is what you read via useSession()/getServerSession().
+     */
     async session({ session, token }) {
       if (token && session?.user) {
         session.user.id = token.id;
@@ -99,7 +117,9 @@ export const authOptions = {
   },
 
   events: {
-    // When a user is created via OAuth, tag their provider as 'google'
+    /**
+     * When an OAuth user is created (e.g., Google sign-in), tag provider in the users collection.
+     */
     async createUser({ user }) {
       try {
         const db = await getDb();
