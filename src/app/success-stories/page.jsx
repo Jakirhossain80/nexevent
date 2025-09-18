@@ -1,28 +1,4 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Poppins, Inter } from "next/font/google";
-
-// Icons
-import { FaQuoteLeft, FaStar, FaUsers, FaCalendarCheck, FaSmile } from "react-icons/fa";
-
-// Reusable components (code-splitting)
-import SectionHeading from "@/components/SectionHeading";
-import StoryCard from "@/components/StoryCard";
-import TestimonialCard from "@/components/TestimonialSuccessCard";
-import MetricCard from "@/components/MetricCard";
-
-// Fonts (NexEvent: Poppins for headings, Inter for body)
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["600", "700"],
-  display: "swap",
-  variable: "--font-poppins",
-});
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-inter",
-});
+import SuccessStoriesContent from "./SuccessStoriesContent";
 
 export const metadata = {
   title: "Success Stories — NexEvent",
@@ -30,6 +6,7 @@ export const metadata = {
     "Inspiring success stories from events powered by NexEvent — measurable impact, delighted clients, and memorable experiences.",
 };
 
+// Stories
 const STORIES = [
   {
     id: 1,
@@ -87,6 +64,7 @@ const STORIES = [
   },
 ];
 
+// Testimonials
 const TESTIMONIALS = [
   {
     name: "Aisha Rahman",
@@ -114,127 +92,19 @@ const TESTIMONIALS = [
   },
 ];
 
+// Metrics
 const METRICS = [
-  { icon: FaUsers, label: "Attendees Engaged", value: "150K+" },
-  { icon: FaCalendarCheck, label: "Events Hosted", value: "1,200+" },
-  { icon: FaSmile, label: "Client Satisfaction", value: "96%" },
+  { icon: "FaUsers", label: "Attendees Engaged", value: "150K+" },
+  { icon: "FaCalendarCheck", label: "Events Hosted", value: "1,200+" },
+  { icon: "FaSmile", label: "Client Satisfaction", value: "96%" },
 ];
 
-export default function SuccessStoriesPage() {
+export default function Page() {
   return (
-    <main
-      className={`${inter.variable} ${poppins.variable} bg-gray-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 transition-all duration-500`}
-      aria-label="Success Stories main content"
-    >
-      {/* Hero */}
-      <section className="px-4 sm:px-6 lg:px-8 pt-12 pb-8">
-        <div className="mx-auto max-w-[1080px] py-20">
-          <header className="text-center">
-            <h1
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-indigo-700 dark:text-indigo-400"
-              style={{ fontFamily: "var(--font-poppins)" }}
-            >
-              Success Stories
-            </h1>
-            <p className="mt-4 max-w-2xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-300">
-              Real events. Real impact. See how teams use NexEvent to plan, run, and scale unforgettable experiences.
-            </p>
-          </header>
-        </div>
-      </section>
-
-      {/* Story Highlights Grid */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="mx-auto max-w-[1680px]">
-          <SectionHeading
-            eyebrow="Highlights"
-            title="Proven Outcomes Across Industries"
-            subtitle="From summits to festivals, NexEvent adapts to your format and scale."
-          />
-
-          <div
-            className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-            role="list"
-            aria-label="Success story cards"
-          >
-            {STORIES.map((story) => (
-              <StoryCard key={story.id} story={story} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="mx-auto max-w-6xl">
-          <SectionHeading
-            eyebrow="Testimonials"
-            title="What Clients Say"
-            subtitle="Trusted by organizers who value reliability, speed, and insights."
-            Icon={FaQuoteLeft}
-          />
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
-              <TestimonialCard key={t.name} t={t} StarIcon={FaStar} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Impact Metrics */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="mx-auto max-w-6xl">
-          <SectionHeading
-            eyebrow="Impact"
-            title="Measured Results"
-            subtitle="Metrics that matter to your team and your stakeholders."
-          />
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            {METRICS.map((m) => (
-              <MetricCard key={m.label} icon={m.icon} label={m.label} value={m.value} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="mx-auto max-w-5xl">
-          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-800/70 p-6 sm:p-8 text-center shadow-sm transition-all duration-500">
-            <h2
-              className="text-2xl sm:text-3xl font-semibold text-slate-900 dark:text-slate-100"
-              style={{ fontFamily: "var(--font-poppins)" }}
-            >
-              Ready to create your own success story?
-            </h2>
-            <p className="mt-3 text-slate-600 dark:text-slate-300">
-              Start a new event in minutes or talk to our team for a personalized walkthrough.
-            </p>
-
-            <div className="mt-6 flex items-center justify-center gap-3">
-              <Link
-                href="/create-event"
-                className="inline-flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-all duration-500"
-                aria-label="Create a new event"
-              >
-                Create Event
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-xl border border-slate-300 dark:border-slate-600 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 px-5 py-3 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 transition-all duration-500"
-                aria-label="Contact NexEvent team"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Decorative (accessibly hidden) */}
-      <span className="sr-only">
-        Colors follow NexEvent palette: Indigo (primary), Emerald (accent), Gray/Slate backgrounds.
-      </span>
-    </main>
+    <SuccessStoriesContent
+      stories={STORIES}
+      testimonials={TESTIMONIALS}
+      metrics={METRICS}
+    />
   );
 }
