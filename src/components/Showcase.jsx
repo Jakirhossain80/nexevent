@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -8,7 +14,6 @@ import {
   FiTrendingUp,
   FiCheckCircle,
 } from "react-icons/fi";
-
 
 const SHOWCASE = [
   {
@@ -68,6 +73,16 @@ const SHOWCASE = [
 ];
 
 export default function Showcase() {
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700, // snappy feel for cards
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate only the first time in view
+    });
+  }, []);
+
   return (
     <section
       id="showcase"
@@ -87,12 +102,15 @@ export default function Showcase() {
               text-indigo-700 dark:text-indigo-300
             "
             style={{ fontFamily: "var(--font-poppins)" }} /* Poppins */
+            data-aos="fade-up"
           >
             Showcasing NexEvent in Action
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             See how NexEvent streamlines event creation, booking, and management with
             a modern, accessible UI across devices.
@@ -118,9 +136,12 @@ export default function Showcase() {
                   transition-all duration-500 hover:-translate-y-0.5
                   focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
                 "
+                /* Card enters upward with a slight stagger */
+                data-aos="fade-up"
+                data-aos-delay={100 * (idx % 3)} /* stagger per column */
               >
                 {/* Media */}
-                <div className="relative">
+                <div className="relative" data-aos="zoom-in" data-aos-delay={150 + 100 * (idx % 3)}>
                   {/* Light image */}
                   <div className="block dark:hidden">
                     <Image
@@ -129,7 +150,6 @@ export default function Showcase() {
                       width={1200}
                       height={800}
                       className="w-full h-auto object-cover"
-                     
                     />
                   </div>
                   {/* Dark image */}
@@ -140,7 +160,6 @@ export default function Showcase() {
                       width={1200}
                       height={800}
                       className="w-full h-auto object-cover"
-                     
                     />
                   </div>
 
@@ -157,13 +176,15 @@ export default function Showcase() {
                     "
                     aria-hidden="true"
                     title={title}
+                    data-aos="zoom-in"
+                    data-aos-delay={220 + 100 * (idx % 3)}
                   >
                     <Icon size={22} />
                   </span>
                 </div>
 
                 {/* Copy */}
-                <div className="pt-8 px-5 sm:px-6 pb-5">
+                <div className="pt-8 px-5 sm:px-6 pb-5" data-aos="fade-up" data-aos-delay={260 + 100 * (idx % 3)}>
                   <h3
                     className="text-base sm:text-lg font-semibold leading-snug"
                     style={{ fontFamily: "var(--font-poppins)" }}
@@ -183,7 +204,7 @@ export default function Showcase() {
         </ul>
 
         {/* Optional CTA */}
-        <div className="mt-10">
+        <div className="mt-10" data-aos="fade-up" data-aos-offset="120">
           <Link
             href="/portfolio" // ← change target if needed
             aria-label="Explore more NexEvent showcases"
