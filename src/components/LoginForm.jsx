@@ -1,15 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useId } from "react";
+import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+
+export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
   const router = useRouter();
-  const search = useSearchParams();
-  const callbackUrl = search.get("callbackUrl") || "/dashboard";
-
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState({ type: "idle", text: "" });
 
@@ -24,19 +21,20 @@ export default function LoginForm() {
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") || "").toLowerCase().trim();
     const password = String(form.get("password") || "");
+    const callbackUrl = initialCallbackUrl || "/dashboard";
 
     try {
-      // Use redirect:false to avoid full page reloads and flaky extension warnings
+      // ✅ Let NextAuth handle the redirect so the session cookie is applied before navigation
       const res = await signIn("credentials", {
         email,
         password,
-        redirect: false,
         callbackUrl,
+        redirect: true, // ← important for reliable redirect after setting cookies
       });
 
-      setLoading(false);
-
+      // With redirect:true, NextAuth navigates away. The code below is a fallback.
       if (res?.error) {
+        setLoading(false);
         setMsg({
           type: "error",
           text: res.error === "CredentialsSignin" ? "Invalid email or password." : res.error,
@@ -44,9 +42,9 @@ export default function LoginForm() {
         return;
       }
 
-      // Success: prefer URL from NextAuth, fallback to callbackUrl
+      setLoading(false);
       setMsg({ type: "success", text: "Logged in! Redirecting…" });
-      router.replace(res?.url || callbackUrl);
+      router.replace(callbackUrl);
     } catch (err) {
       setLoading(false);
       setMsg({ type: "error", text: err?.message || "Something went wrong." });
@@ -55,14 +53,14 @@ export default function LoginForm() {
 
   return (
     <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500">
-      {/* Show error passed from NextAuth (?error=...) */}
+      {/* If you want to surface query errors like ?error=CredentialsSignin, keep this lightweight hint */}
       {typeof window !== "undefined" &&
-      window?.location?.search.includes("error=CredentialsSignin") &&
-      !msg.text ? (
-        <p className="mb-3 text-sm text-rose-600 dark:text-rose-400" role="alert">
-          Invalid email or password.
-        </p>
-      ) : null}
+        window?.location?.search.includes("error=CredentialsSignin") &&
+        !msg.text && (
+          <p className="mb-3 text-sm text-rose-600 dark:text-rose-400" role="alert">
+            Invalid email or password.
+          </p>
+        )}
 
       <form onSubmit={onSubmit} className="space-y-4" aria-label="Login form">
         <div>
@@ -107,7 +105,7 @@ export default function LoginForm() {
 
       <div className="mt-4">
         <button
-          onClick={() => signIn("google", { callbackUrl })}
+          onClick={() => signIn("google", { callbackUrl: initialCallbackUrl || "/dashboard" })}
           className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 px-5 py-3 text-sm font-medium transition-all duration-500"
           aria-label="Continue with Google"
         >
