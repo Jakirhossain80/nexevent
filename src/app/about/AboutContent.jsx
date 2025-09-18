@@ -43,13 +43,13 @@ const HIGHLIGHTS = [
 ];
 
 export default function AboutContent() {
-  // Initialize AOS on the client
+  // Initialize AOS only on the client
   useEffect(() => {
     AOS.init({
       duration: 700,
       easing: "ease-out-cubic",
       offset: 80,
-      once: true, // animate only the first time in view
+      once: true,
     });
   }, []);
 
@@ -87,7 +87,7 @@ export default function AboutContent() {
             </p>
           </header>
 
-          {/* Optional hero illustration (swap with your own assets) */}
+          {/* Optional hero illustration */}
           <div
             className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
             data-aos="fade-up"
@@ -203,7 +203,7 @@ export default function AboutContent() {
                     focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
                   "
                   data-aos="fade-up"
-                  data-aos-delay={100 * (idx % 4)} // subtle stagger across the row
+                  data-aos-delay={100 * (idx % 4)}
                 >
                   <div className="flex items-start gap-4">
                     <span

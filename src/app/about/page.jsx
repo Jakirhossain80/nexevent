@@ -1,5 +1,6 @@
-import dynamic from "next/dynamic";
 import { FiUsers, FiCalendar, FiZap, FiShield } from "react-icons/fi";
+// ✅ Import the client component directly — no `ssr:false`
+import AboutContent from "./AboutContent";
 
 export const metadata = {
   title: "About NexEvent — Plan, Promote, and Manage Events",
@@ -13,12 +14,8 @@ export const metadata = {
   },
 };
 
-// 👇 Dynamically import the client component so AOS runs on the client only
-const AboutContent = dynamic(() => import("./AboutContent"), {
-  ssr: false,
-  loading: () => null, // no visual change; preserves your current UX
-});
-
 export default function AboutPage() {
+  // Server component simply renders the client child
   return <AboutContent />;
 }
+
