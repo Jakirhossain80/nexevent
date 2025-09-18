@@ -15,7 +15,6 @@ const NAV_LINKS = [
   { href: "/services", label: "Services" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/success-stories", label: "Success Stories" },
-  { href: "/privacy", label: "Privacy" },
   { href: "/contact", label: "Contact" },
   { href: "/dashboard", label: "Dashboard", protected: true },
 ];

@@ -3,8 +3,9 @@ import { Suspense } from "react";
 import { Poppins, Inter } from "next/font/google";
 import Link from "next/link";
 import LoginForm from "@/components/LoginForm";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
-export const dynamic = "force-dynamic"; // ensure fresh rendering for auth flows
+export const dynamic = "force-dynamic";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -40,7 +41,7 @@ export default async function LoginPage({ searchParams }) {
 
         <div className="mt-6">
           {/* Suspense is fine, but not strictly necessary now that we await searchParams */}
-          <Suspense fallback={null}>
+          <Suspense fallback={<div className="flex justify-center p-4"><LoadingSpinner /></div>}>
             <LoginForm initialCallbackUrl={callbackUrl} />
           </Suspense>
         </div>
