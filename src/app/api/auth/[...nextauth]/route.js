@@ -7,6 +7,7 @@ import { clientPromise, getDb } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcryptjs";
 
+
 // Ensure Node runtime (Mongoose/native driver & NextAuth need Node, not Edge)
 export const runtime = "nodejs";
 
