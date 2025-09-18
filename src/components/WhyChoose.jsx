@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Link from "next/link";
 import {
   FiLayers,
@@ -7,7 +13,6 @@ import {
   FiLogIn,
   FiLayout,
 } from "react-icons/fi";
-
 
 const REASONS = [
   {
@@ -49,6 +54,16 @@ const REASONS = [
 ];
 
 export default function WhyChoose() {
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate only on first scroll into view
+    });
+  }, []);
+
   return (
     <section
       id="why-choose"
@@ -68,12 +83,15 @@ export default function WhyChoose() {
               text-indigo-700 dark:text-indigo-300
             "
             style={{ fontFamily: "var(--font-poppins)" }} /* Poppins */
+            data-aos="fade-up"
           >
             Why Choose NexEvent?
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             NexEvent brings together authentication, bookings, and a polished dashboard
             to help you plan, promote, and manage events—fast, securely, and at scale.
@@ -99,6 +117,8 @@ export default function WhyChoose() {
                   hover:shadow-md hover:-translate-y-0.5
                   focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
                 "
+                data-aos="fade-up"
+                data-aos-delay={100 * (idx % 3)} /* subtle stagger by column */
               >
                 <div className="flex items-start gap-4">
                   {/* Icon badge (decorative) */}
@@ -113,6 +133,8 @@ export default function WhyChoose() {
                       shrink-0
                     "
                     aria-hidden="true"
+                    data-aos="zoom-in"
+                    data-aos-delay={140 + 100 * (idx % 3)}
                   >
                     <Icon size={22} />
                   </span>
@@ -121,12 +143,16 @@ export default function WhyChoose() {
                     <h3
                       className="text-base sm:text-lg font-semibold leading-snug"
                       style={{ fontFamily: "var(--font-poppins)" }} /* Poppins */
+                      data-aos="fade-up"
+                      data-aos-delay={180 + 100 * (idx % 3)}
                     >
                       {title}
                     </h3>
                     <p
                       className="mt-1 text-sm sm:text-base text-slate-600 dark:text-slate-300"
                       style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+                      data-aos="fade-up"
+                      data-aos-delay={220 + 100 * (idx % 3)}
                     >
                       {desc}
                     </p>
@@ -138,7 +164,7 @@ export default function WhyChoose() {
         </ul>
 
         {/* Optional CTA */}
-        <div className="mt-10">
+        <div className="mt-10" data-aos="fade-up" data-aos-offset="120">
           <Link
             href="/signup" /* ← change target if needed */
             aria-label="Get started with NexEvent"

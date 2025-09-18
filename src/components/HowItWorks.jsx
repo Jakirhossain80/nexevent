@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import { FiUserCheck, FiSearch, FiCalendar, FiCheckCircle } from "react-icons/fi";
 
 const STEPS = [
@@ -28,6 +34,16 @@ const STEPS = [
 ];
 
 export default function HowItWorks() {
+  // Initialize AOS for scroll animations
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once when scrolled into view
+    });
+  }, []);
+
   return (
     <section
       id="how-it-works"
@@ -47,12 +63,15 @@ export default function HowItWorks() {
               text-indigo-700 dark:text-indigo-300
             "
             style={{ fontFamily: "var(--font-poppins)" }} /* Poppins */
+            data-aos="fade-up"
           >
             How It Works
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             From sign-up to tracking results — NexEvent guides you through every step of
             creating, promoting, and managing successful events.
@@ -78,6 +97,8 @@ export default function HowItWorks() {
                   hover:-translate-y-0.5
                   focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
                 "
+                data-aos="fade-up"
+                data-aos-delay={100 * (idx % 3)} /* subtle stagger by column */
               >
                 <div className="flex items-start gap-4">
                   {/* Icon badge */}
@@ -91,6 +112,8 @@ export default function HowItWorks() {
                       transition-all duration-500
                     "
                     aria-hidden="true"
+                    data-aos="zoom-in"
+                    data-aos-delay={140 + 100 * (idx % 3)}
                   >
                     <Icon size={22} />
                   </span>
@@ -99,12 +122,16 @@ export default function HowItWorks() {
                     <h3
                       className="text-base sm:text-lg font-semibold leading-snug"
                       style={{ fontFamily: "var(--font-poppins)" }} /* Poppins */
+                      data-aos="fade-up"
+                      data-aos-delay={180 + 100 * (idx % 3)}
                     >
                       {title}
                     </h3>
                     <p
                       className="mt-1 text-sm sm:text-base text-slate-600 dark:text-slate-300"
                       style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+                      data-aos="fade-up"
+                      data-aos-delay={220 + 100 * (idx % 3)}
                     >
                       {desc}
                     </p>
