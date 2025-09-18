@@ -1,10 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import { Poppins, Inter } from "next/font/google";
 import { FiCheck, FiZap, FiStar, FiShield } from "react-icons/fi";
 import clsx from "clsx";
-
-
 
 // Load project fonts (one-time per bundle) — these become CSS variables we can use in className
 const poppins = Poppins({
@@ -18,7 +20,6 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
-
 
 const defaultPlans = [
   {
@@ -75,6 +76,16 @@ const defaultPlans = [
 ];
 
 export default function Pricing({ plans = defaultPlans }) {
+  // Initialize AOS animations on client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
+
   return (
     <section
       aria-labelledby="pricing-heading"
@@ -93,12 +104,15 @@ export default function Pricing({ plans = defaultPlans }) {
             id="pricing-heading"
             className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-800 dark:text-slate-100"
             style={{ fontFamily: "var(--font-poppins)" }}
+            data-aos="fade-up"
           >
             Our Pricing Plans
           </h2>
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }}
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             Choose a plan that fits your event goals. Upgrade anytime as your audience grows.
           </p>
@@ -107,7 +121,7 @@ export default function Pricing({ plans = defaultPlans }) {
         {/* Grid of plans */}
         {/* Mobile: stacked; Tablet: 2 columns; Desktop: 3 columns */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-8 gap-x-8 md:gap-x-12 lg:gap-x-24 ">
-          {plans.map((plan) => (
+          {plans.map((plan, idx) => (
             <article
               key={plan.id}
               className={clsx(
@@ -119,16 +133,19 @@ export default function Pricing({ plans = defaultPlans }) {
                 // Slight scale on hover for desktop
                 "hover:scale-[1.01]"
               )}
+              data-aos="fade-up"
+              data-aos-delay={100 * (idx % 3)} // subtle stagger by column
             >
               {/* Featured Ribbon */}
               {plan.featured && (
                 <div
                   className={clsx(
                     "absolute top-0 right-0 rounded-bl-2xl px-3 py-1 text-xs font-semibold",
-                    // Use Emerald-500 as an accent per NexEvent system
                     "bg-emerald-500 text-white"
                   )}
                   aria-label="Most popular plan"
+                  data-aos="zoom-in"
+                  data-aos-delay={140 + 100 * (idx % 3)}
                 >
                   Most Popular
                 </div>
@@ -141,10 +158,11 @@ export default function Pricing({ plans = defaultPlans }) {
                   <div
                     className={clsx(
                       "inline-flex items-center justify-center w-10 h-10 rounded-xl",
-                      // Primary indigo gradient for visual punch
                       "bg-gradient-to-br from-indigo-600 to-indigo-700 text-white"
                     )}
                     aria-hidden="true"
+                    data-aos="zoom-in"
+                    data-aos-delay={140 + 100 * (idx % 3)}
                   >
                     {plan.icon}
                   </div>
@@ -152,6 +170,8 @@ export default function Pricing({ plans = defaultPlans }) {
                     <h3
                       className="text-lg font-semibold text-slate-800 dark:text-slate-100"
                       style={{ fontFamily: "var(--font-poppins)" }}
+                      data-aos="fade-up"
+                      data-aos-delay={180 + 100 * (idx % 3)}
                     >
                       {plan.name}
                     </h3>
@@ -159,6 +179,8 @@ export default function Pricing({ plans = defaultPlans }) {
                       <p
                         className="text-sm text-slate-500 dark:text-slate-400"
                         style={{ fontFamily: "var(--font-inter)" }}
+                        data-aos="fade-up"
+                        data-aos-delay={210 + 100 * (idx % 3)}
                       >
                         {plan.tagline}
                       </p>
@@ -167,11 +189,10 @@ export default function Pricing({ plans = defaultPlans }) {
                 </div>
 
                 {/* Price */}
-                <div className="mt-6 flex items-baseline gap-1">
+                <div className="mt-6 flex items-baseline gap-1" data-aos="fade-up" data-aos-delay={240 + 100 * (idx % 3)}>
                   <span
                     className={clsx(
                       "text-3xl font-extrabold",
-                      // Price color pops with primary palette
                       plan.featured
                         ? "text-indigo-700 dark:text-indigo-300"
                         : "text-slate-800 dark:text-slate-100"
@@ -191,7 +212,12 @@ export default function Pricing({ plans = defaultPlans }) {
                 {/* Features */}
                 <ul className="mt-6 space-y-2">
                   {plan.features.map((feat, i) => (
-                    <li key={i} className="flex items-start gap-3">
+                    <li
+                      key={i}
+                      className="flex items-start gap-3"
+                      data-aos="fade-up"
+                      data-aos-delay={270 + i * 60 + 100 * (idx % 3)} // cascade features within each card
+                    >
                       <FiCheck
                         className="mt-0.5 shrink-0 text-emerald-500"
                         aria-hidden="true"
@@ -207,12 +233,11 @@ export default function Pricing({ plans = defaultPlans }) {
                 </ul>
 
                 {/* CTA */}
-                <div className="mt-8">
+                <div className="mt-8" data-aos="zoom-in" data-aos-delay={270 + plan.features.length * 60 + 100 * (idx % 3)}>
                   <a
                     href={plan.cta?.href || "/signup"}
                     className={clsx(
                       "inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium focus:outline-none focus-visible:ring-2 transition-all duration-500",
-                      // Button colors use primary indigo with hover; featured is stronger
                       plan.featured
                         ? "bg-indigo-600 hover:bg-indigo-700 text-white focus-visible:ring-indigo-500"
                         : "bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 focus-visible:ring-slate-400"
@@ -232,6 +257,8 @@ export default function Pricing({ plans = defaultPlans }) {
         <p
           className="mt-8 text-center text-xs text-slate-500 dark:text-slate-400"
           style={{ fontFamily: "var(--font-inter)" }}
+          data-aos="fade-up"
+          data-aos-offset="120"
         >
           Prices shown in USD. You can change or cancel your plan anytime.
         </p>
@@ -239,4 +266,3 @@ export default function Pricing({ plans = defaultPlans }) {
     </section>
   );
 }
-

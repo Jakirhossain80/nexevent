@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-
-
 
 const FAQS = [
   {
@@ -35,6 +36,16 @@ export default function FAQ() {
   // Track open indices (Set allows multi-open control)
   const [openSet, setOpenSet] = useState(new Set());
 
+  // Initialize AOS (client-only)
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once when scrolled into view
+    });
+  }, []);
+
   const toggle = (idx) => {
     setOpenSet((prev) => {
       const next = new Set(prev);
@@ -60,7 +71,7 @@ export default function FAQ() {
     >
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Heading */}
-        <header className="max-w-3xl">
+        <header className="max-w-3xl" data-aos="fade-up">
           <h2
             className="
               text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
@@ -73,16 +84,15 @@ export default function FAQ() {
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} // Inter
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             Answers to common questions about authentication, bookings, performance, and plans.
           </p>
         </header>
 
         {/* FAQ list */}
-        <ul
-          className="mt-10 space-y-3 sm:space-y-4"
-          role="list"
-        >
+        <ul className="mt-10 space-y-3 sm:space-y-4" role="list">
           {FAQS.map((item, idx) => (
             <FAQItem
               key={idx}
@@ -117,6 +127,8 @@ function FAQItem({ index, question, answer, open, onToggle }) {
         hover:shadow-md hover:-translate-y-0.5
         focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
       "
+      data-aos="fade-up"
+      data-aos-delay={100 * (index % 3)} /* subtle stagger by column */
     >
       <h3>
         <button
@@ -137,6 +149,8 @@ function FAQItem({ index, question, answer, open, onToggle }) {
           <span
             className="text-base sm:text-lg font-semibold"
             style={{ fontFamily: "var(--font-poppins)" }} // Poppins
+            data-aos="fade-up"
+            data-aos-delay={140 + 100 * (index % 3)}
           >
             {question}
           </span>
@@ -151,6 +165,8 @@ function FAQItem({ index, question, answer, open, onToggle }) {
               transition-all duration-500
             "
             aria-hidden="true"
+            data-aos="zoom-in"
+            data-aos-delay={160 + 100 * (index % 3)}
           >
             {open ? <FaChevronUp className="h-4 w-4" /> : <FaChevronDown className="h-4 w-4" />}
           </span>
@@ -168,6 +184,8 @@ function FAQItem({ index, question, answer, open, onToggle }) {
           overflow-hidden
           transition-all duration-500 ease-in-out
         "
+        data-aos="fade-down"
+        data-aos-delay={200 + 100 * (index % 3)}
       >
         <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-0">
           <p

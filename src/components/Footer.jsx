@@ -1,5 +1,11 @@
-import Image from "next/image";
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Link from "next/link";
+import Image from "next/image";
 import {
   FaFacebookF,
   FaTwitter,
@@ -7,8 +13,17 @@ import {
   FaInstagram,
 } from "react-icons/fa";
 
-
 export default function Footer() {
+  // Init AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
+
   const year = new Date().getFullYear();
 
   const NAV_LINKS = [
@@ -34,12 +49,12 @@ export default function Footer() {
         {/* Top: 3-column layout */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {/* Left: Logo + blurb */}
-          <div>
+          <div data-aos="fade-right">
             {/* Light/Dark logo swap */}
             <div className="flex items-center gap-3">
-              <div className="block dark:hidden">
+              <div className="block dark:hidden" data-aos="zoom-in" data-aos-delay="80">
                 <Image
-                  src="/logo.png" 
+                  src="/logo.png"
                   alt="NexEvent logo"
                   width={40}
                   height={40}
@@ -47,9 +62,9 @@ export default function Footer() {
                   className="h-10 w-10 object-contain"
                 />
               </div>
-              <div className="hidden dark:block">
+              <div className="hidden dark:block" data-aos="zoom-in" data-aos-delay="80">
                 <Image
-                  src="/logo.png" 
+                  src="/logo.png"
                   alt="NexEvent logo (dark)"
                   width={40}
                   height={40}
@@ -69,6 +84,8 @@ export default function Footer() {
             <p
               className="mt-3 text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-md"
               style={{ fontFamily: "var(--font-inter)" }}
+              data-aos="fade-up"
+              data-aos-delay="140"
             >
               Plan, promote, and manage events with a modern, secure workflow —
               built with Next.js, optimized for performance, and designed for teams.
@@ -76,10 +93,7 @@ export default function Footer() {
           </div>
 
           {/* Center: Navigation */}
-          <nav
-            className="md:mx-auto"
-            aria-label="Footer navigation"
-          >
+          <nav className="md:mx-auto" aria-label="Footer navigation" data-aos="fade-up">
             <h3
               className="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200"
               style={{ fontFamily: "var(--font-poppins)" }}
@@ -88,8 +102,8 @@ export default function Footer() {
             </h3>
 
             <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3" role="list">
-              {NAV_LINKS.map(({ href, label }) => (
-                <li key={href}>
+              {NAV_LINKS.map(({ href, label }, i) => (
+                <li key={href} data-aos="fade-up" data-aos-delay={80 + i * 40}>
                   <Link
                     href={href}
                     className="
@@ -111,7 +125,7 @@ export default function Footer() {
           </nav>
 
           {/* Right: Social links */}
-          <div className="md:justify-self-end">
+          <div className="md:justify-self-end" data-aos="fade-left">
             <h3
               className="text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200"
               style={{ fontFamily: "var(--font-poppins)" }}
@@ -125,7 +139,7 @@ export default function Footer() {
                 { href: "https://twitter.com/", Icon: FaTwitter, label: "Twitter / X" },
                 { href: "https://linkedin.com/", Icon: FaLinkedinIn, label: "LinkedIn" },
                 { href: "https://instagram.com/", Icon: FaInstagram, label: "Instagram" },
-              ].map(({ href, Icon, label }) => (
+              ].map(({ href, Icon, label }, i) => (
                 <Link
                   key={label}
                   href={href}
@@ -145,6 +159,8 @@ export default function Footer() {
                     transition-all duration-500
                   "
                   title={label}
+                  data-aos="zoom-in"
+                  data-aos-delay={100 + i * 60}
                 >
                   <Icon className="h-4 w-4" aria-hidden="true" />
                 </Link>
@@ -154,10 +170,14 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="mt-10 h-px bg-gray-200 dark:bg-slate-800" />
+        <div className="mt-10 h-px bg-gray-200 dark:bg-slate-800" data-aos="fade-in" />
 
         {/* Bottom bar */}
-        <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div
+          className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3"
+          data-aos="fade-up"
+          data-aos-delay="80"
+        >
           <p
             className="text-xs sm:text-sm text-slate-500 dark:text-slate-400"
             style={{ fontFamily: "var(--font-inter)" }}
@@ -178,6 +198,8 @@ export default function Footer() {
                 transition-all duration-500
               "
               style={{ fontFamily: "var(--font-inter)" }}
+              data-aos="fade-up"
+              data-aos-delay="120"
             >
               Privacy
             </Link>
@@ -193,6 +215,8 @@ export default function Footer() {
                 transition-all duration-500
               "
               style={{ fontFamily: "var(--font-inter)" }}
+              data-aos="fade-up"
+              data-aos-delay="160"
             >
               Terms
             </Link>

@@ -1,6 +1,11 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Image from "next/image";
 import { FaStar, FaQuoteLeft } from "react-icons/fa";
-
 
 const TESTIMONIALS = [
   {
@@ -30,6 +35,16 @@ const TESTIMONIALS = [
 ];
 
 export default function Testimonials() {
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
+
   return (
     <section
       id="testimonials"
@@ -42,7 +57,7 @@ export default function Testimonials() {
     >
       <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Section heading */}
-        <header className="max-w-3xl">
+        <header className="max-w-3xl" data-aos="fade-up">
           <h2
             className="
               text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
@@ -55,6 +70,8 @@ export default function Testimonials() {
           <p
             className="mt-3 text-slate-600 dark:text-slate-300"
             style={{ fontFamily: "var(--font-inter)" }} /* Inter */
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             Real feedback from teams using NexEvent to plan, promote, and manage
             their events with confidence.
@@ -81,6 +98,8 @@ export default function Testimonials() {
                 snap-start md:snap-auto
                 min-w-[85%] sm:min-w-[70%] md:min-w-0
               "
+              data-aos="fade-up"
+              data-aos-delay={100 * (idx % 3)} /* subtle stagger across columns */
             >
               <article
                 className="
@@ -102,6 +121,8 @@ export default function Testimonials() {
                     drop-shadow
                   "
                   aria-hidden="true"
+                  data-aos="zoom-in"
+                  data-aos-delay={140 + 100 * (idx % 3)}
                 />
 
                 {/* Header: Avatar + Name/Role */}
@@ -113,6 +134,8 @@ export default function Testimonials() {
                       overflow-hidden
                     "
                     aria-hidden="true"
+                    data-aos="zoom-in"
+                    data-aos-delay={160 + 100 * (idx % 3)}
                   >
                     {/* next/image optimizes avatars; lazy by default */}
                     <Image
@@ -121,7 +144,6 @@ export default function Testimonials() {
                       fill
                       sizes="56px"
                       className="object-cover"
-                    
                     />
                   </div>
 
@@ -129,12 +151,16 @@ export default function Testimonials() {
                     <h3
                       className="text-base font-semibold truncate"
                       style={{ fontFamily: "var(--font-poppins)" }}
+                      data-aos="fade-up"
+                      data-aos-delay={180 + 100 * (idx % 3)}
                     >
                       {t.name}
                     </h3>
                     <p
                       className="text-sm text-slate-500 dark:text-slate-400 truncate"
                       style={{ fontFamily: "var(--font-inter)" }}
+                      data-aos="fade-up"
+                      data-aos-delay={200 + 100 * (idx % 3)}
                     >
                       {t.role}
                     </p>
@@ -145,12 +171,19 @@ export default function Testimonials() {
                 <p
                   className="mt-4 text-sm sm:text-base text-slate-700 dark:text-slate-200"
                   style={{ fontFamily: "var(--font-inter)" }}
+                  data-aos="fade-up"
+                  data-aos-delay={220 + 100 * (idx % 3)}
                 >
                   {t.text}
                 </p>
 
                 {/* Star rating */}
-                <div className="mt-5 flex items-center gap-1" aria-label={`Rating: ${t.rating} out of 5 stars`}>
+                <div
+                  className="mt-5 flex items-center gap-1"
+                  aria-label={`Rating: ${t.rating} out of 5 stars`}
+                  data-aos="zoom-in-up"
+                  data-aos-delay={260 + 100 * (idx % 3)}
+                >
                   {Array.from({ length: 5 }).map((_, i) => (
                     <FaStar
                       key={i}
@@ -174,6 +207,8 @@ export default function Testimonials() {
         <p
           className="mt-3 md:hidden text-xs text-slate-500 dark:text-slate-400"
           style={{ fontFamily: "var(--font-inter)" }}
+          data-aos="fade-up"
+          data-aos-offset="120"
         >
           Tip: swipe to see more testimonials →
         </p>

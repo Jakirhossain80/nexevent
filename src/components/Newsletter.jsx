@@ -1,14 +1,26 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useId, useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Image from "next/image";
 import { FiMail } from "react-icons/fi";
-
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
   const [state, setState] = useState({ loading: false, error: "", success: "" });
   const inputId = useId();
+
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,9 +69,10 @@ export default function Newsletter() {
             bg-white/70 dark:bg-slate-800/70 backdrop-blur
             p-6 sm:p-10 shadow-sm transition-all duration-500
           "
+          data-aos="fade-up"
         >
           {/* Left: Heading + Form */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7" data-aos="fade-right" data-aos-delay="80">
             <h2
               className="
                 text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
@@ -72,6 +85,8 @@ export default function Newsletter() {
             <p
               className="mt-3 text-slate-600 dark:text-slate-300"
               style={{ fontFamily: "var(--font-inter)" }} // Inter (body)
+              data-aos="fade-up"
+              data-aos-delay="150"
             >
               Get product updates, tips, and upcoming event highlights delivered to your inbox.
               No spam, unsubscribe anytime.
@@ -83,16 +98,15 @@ export default function Newsletter() {
               className="mt-6"
               noValidate
               aria-labelledby="newsletter-title"
+              data-aos="zoom-in"
+              data-aos-delay="200"
             >
-              <label
-                htmlFor={inputId}
-                className="sr-only"
-              >
+              <label htmlFor={inputId} className="sr-only">
                 Email address
               </label>
 
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <div className="relative flex-1">
+                <div className="relative flex-1" data-aos="fade-up" data-aos-delay="240">
                   {/* Mail icon inside input */}
                   <span
                     className="
@@ -145,6 +159,8 @@ export default function Newsletter() {
                   "
                   style={{ fontFamily: "var(--font-inter)" }}
                   aria-label={state.loading ? "Subscribing…" : "Subscribe to newsletter"}
+                  data-aos="zoom-in"
+                  data-aos-delay="260"
                 >
                   {state.loading ? "Subscribing…" : "Subscribe"}
                 </button>
@@ -156,6 +172,8 @@ export default function Newsletter() {
                 className="mt-3 min-h-[1.25rem]"
                 aria-live="polite"
                 style={{ fontFamily: "var(--font-inter)" }}
+                data-aos="fade-up"
+                data-aos-delay="300"
               >
                 {state.error && (
                   <p className="text-sm text-rose-600 dark:text-rose-400 transition-all duration-500">
@@ -172,9 +190,9 @@ export default function Newsletter() {
           </div>
 
           {/* Right: Optional decorative illustration (swap assets) */}
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5" data-aos="fade-left" data-aos-delay="120">
             {/* Light image */}
-            <div className="block dark:hidden">
+            <div className="block dark:hidden" data-aos="zoom-in" data-aos-delay="180">
               <Image
                 src="/light4.png"
                 alt="Newsletter illustration (light)"
@@ -185,7 +203,7 @@ export default function Newsletter() {
               />
             </div>
             {/* Dark image */}
-            <div className="hidden dark:block">
+            <div className="hidden dark:block" data-aos="zoom-in" data-aos-delay="180">
               <Image
                 src="/dark4.png"
                 alt="Newsletter illustration (dark)"

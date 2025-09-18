@@ -1,9 +1,24 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Link from "next/link";
 import Image from "next/image";
 import { FaArrowRight } from "react-icons/fa";
 
-
 export default function CTA() {
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
+
   return (
     <section
       id="cta"
@@ -27,9 +42,10 @@ export default function CTA() {
             shadow-sm
             transition-all duration-500
           "
+          data-aos="fade-up"
         >
           {/* Text */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-8" data-aos="fade-right" data-aos-delay="80">
             <h2
               className="
                 text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight
@@ -42,13 +58,15 @@ export default function CTA() {
             <p
               className="mt-3 text-slate-600 dark:text-slate-300 max-w-2xl"
               style={{ fontFamily: "var(--font-inter)" }} // Inter (body)
+              data-aos="fade-up"
+              data-aos-delay="160"
             >
               Create, publish, and manage events with a fast, secure, and modern
               workflow. Start free and scale when you’re ready.
             </p>
 
             {/* Actions */}
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4" data-aos="zoom-in" data-aos-delay="220">
               {/* Primary CTA */}
               <Link
                 href="/signup"
@@ -91,9 +109,9 @@ export default function CTA() {
           </div>
 
           {/* Optional decorative image (uses next/image for optimization) */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4" data-aos="fade-left" data-aos-delay="120">
             {/* Replace /cta-illustration-(light|dark).png with your real assets */}
-            <div className="block dark:hidden">
+            <div className="block dark:hidden" data-aos="zoom-in" data-aos-delay="180">
               <Image
                 src="/light5.png"
                 alt="Illustration of organizing events with NexEvent"
@@ -103,7 +121,7 @@ export default function CTA() {
                 priority={false} // keep lightweight; raise to true only if above the fold and critical to LCP
               />
             </div>
-            <div className="hidden dark:block">
+            <div className="hidden dark:block" data-aos="zoom-in" data-aos-delay="180">
               <Image
                 src="/dark5.png"
                 alt="Illustration of organizing events with NexEvent (dark mode)"
