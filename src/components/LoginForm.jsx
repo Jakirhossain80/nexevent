@@ -1,31 +1,17 @@
 "use client";
 
-import { useState, useId, useEffect } from "react";
+import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useId } from "react";
 
-
-export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
+export default function LoginForm() {
   const router = useRouter();
   const search = useSearchParams();
-
-  // Final callback target priority: prop -> ?callbackUrl -> /dashboard
-  const callbackUrl = initialCallbackUrl || search.get("callbackUrl") || "/dashboard";
+  const callbackUrl = search.get("callbackUrl") || "/dashboard";
 
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState({ type: "idle", text: "" });
-
-  // read any ?error from NextAuth and show a friendly message
-  useEffect(() => {
-    const err = search.get("error");
-    if (err && !msg.text) {
-      setMsg({
-        type: "error",
-        text: err === "CredentialsSignin" ? "Invalid email or password." : "Authentication error. Please try again.",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
 
   const emailId = useId();
   const passId = useId();
@@ -40,7 +26,7 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
     const password = String(form.get("password") || "");
 
     try {
-      // Use redirect:false so we can handle errors without a full page nav
+      // Use redirect:false to avoid full page reloads and flaky extension warnings
       const res = await signIn("credentials", {
         email,
         password,
@@ -58,17 +44,26 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
         return;
       }
 
-      // Success → NextAuth returns a URL; prefer it, else fallback to our callbackUrl
+      // Success: prefer URL from NextAuth, fallback to callbackUrl
       setMsg({ type: "success", text: "Logged in! Redirecting…" });
       router.replace(res?.url || callbackUrl);
     } catch (err) {
       setLoading(false);
-      setMsg({ type: "error", text: err?.message || "Something went wrong. Please try again." });
+      setMsg({ type: "error", text: err?.message || "Something went wrong." });
     }
   }
 
   return (
     <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500">
+      {/* Show error passed from NextAuth (?error=...) */}
+      {typeof window !== "undefined" &&
+      window?.location?.search.includes("error=CredentialsSignin") &&
+      !msg.text ? (
+        <p className="mb-3 text-sm text-rose-600 dark:text-rose-400" role="alert">
+          Invalid email or password.
+        </p>
+      ) : null}
+
       <form onSubmit={onSubmit} className="space-y-4" aria-label="Login form">
         <div>
           <label htmlFor={emailId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
