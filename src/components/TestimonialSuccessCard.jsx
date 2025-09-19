@@ -18,6 +18,7 @@ export default function TestimonialSuccessCard({ t, StarIcon }) {
       once: true, // animate each testimonial once
     });
   }, []);
+  
 
   return (
     <blockquote
