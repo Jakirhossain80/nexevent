@@ -73,7 +73,7 @@ export default function Features() {
       aria-label="NexEvent features"
       data-aos="fade-in"
     >
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
+      <div className="max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Section Title & Description */}
         <header className="max-w-3xl" data-aos="fade-up" data-aos-delay="50">
           <h2

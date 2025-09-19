@@ -97,7 +97,7 @@ export default function Pricing({ plans = defaultPlans }) {
         "bg-gray-50 dark:bg-slate-900 transition-all duration-500 w-full"
       )}
     >
-      <div className="mx-auto max-w-[1680px] px-4 sm:px-6 lg:px-8 py-16">
+      <div className="mx-auto max-w-[1480px] px-4 sm:px-6 lg:px-8 py-16">
         {/* Heading */}
         <div className="text-center max-w-2xl mx-auto">
           <h2

@@ -79,7 +79,7 @@ export default function SuccessStoriesContent({ stories, testimonials, metrics }
 
       {/* Story Highlights Grid */}
       <section className="px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="mx-auto max-w-[1680px]">
+        <div className="mx-auto max-w-[1480px]">
           <div data-aos="fade-up">
             <SectionHeading
               eyebrow="Highlights"

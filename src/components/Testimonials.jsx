@@ -55,7 +55,7 @@ export default function Testimonials() {
       "
       aria-label="What our clients say about NexEvent"
     >
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
+      <div className="max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Section heading */}
         <header className="max-w-3xl" data-aos="fade-up">
           <h2

@@ -30,7 +30,7 @@ export default function CTA() {
       "
       aria-label="Call to action"
     >
-      <div className="max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
+      <div className="max-w-[1480px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
         {/* Content wrapper: stacked → side-by-side */}
         <div
           className="
