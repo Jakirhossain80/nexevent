@@ -5,19 +5,12 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { FiSun, FiMoon } from "react-icons/fi";
 
-/**
- * ThemeToggle
- * - Uses next-themes to add/remove "dark" on <html>.
- * - Guards against SSR hydration mismatch with a mounted flag.
- * - Minimal, accessible, and works with Tailwind `dark:` classes.
- */
 export default function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme(); // resolvedTheme = "light" | "dark"
+  const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
-  // Avoid hydration mismatch: render a neutral skeleton until mounted
   if (!mounted) {
     return (
       <button
@@ -42,13 +35,8 @@ export default function ThemeToggle() {
         transition-all duration-300
       "
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
       {isDark ? <FiSun className="h-5 w-5" /> : <FiMoon className="h-5 w-5" />}
-      {/* Optional text label (uncomment if you want text next to the icon) */}
-      {/* <span className="text-sm" style={{ fontFamily: "var(--font-inter)" }}>
-        {isDark ? "Light" : "Dark"}
-      </span> */}
     </button>
   );
 }
