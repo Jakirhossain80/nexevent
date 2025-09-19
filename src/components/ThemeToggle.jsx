@@ -1,39 +1,54 @@
+// src/components/ThemeToggle.jsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
-import { FiMoon, FiSun } from "react-icons/fi";
+import { FiSun, FiMoon } from "react-icons/fi";
 
+/**
+ * ThemeToggle
+ * - Uses next-themes to add/remove "dark" on <html>.
+ * - Guards against SSR hydration mismatch with a mounted flag.
+ * - Minimal, accessible, and works with Tailwind `dark:` classes.
+ */
 export default function ThemeToggle() {
-  const { theme, setTheme, systemTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme(); // resolvedTheme = "light" | "dark"
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
+  // Avoid hydration mismatch: render a neutral skeleton until mounted
   if (!mounted) {
-    // Avoids mismatch: render a neutral button without icon before mount
     return (
       <button
         aria-label="Toggle theme"
-        className="rounded-full p-2 border border-gray-200 dark:border-slate-700"
-      />
+        className="p-2 rounded-md text-slate-700 dark:text-slate-100 transition-colors"
+      >
+        <FiSun className="h-5 w-5 opacity-0" />
+      </button>
     );
   }
 
-  const current = theme === "system" ? systemTheme : theme;
-  const isDark = current === "dark";
+  const isDark = resolvedTheme === "dark";
 
   return (
     <button
-      aria-label="Toggle theme"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-slate-700 px-3 py-2
-                 bg-white text-slate-700 hover:bg-gray-50
-                 dark:bg-slate-800 dark:text-slate-100 dark:hover:bg-slate-700 transition"
+      className="
+        inline-flex items-center gap-2
+        rounded-md p-2
+        text-slate-700 hover:bg-gray-100
+        dark:text-slate-100 dark:hover:bg-slate-800
+        transition-all duration-300
+      "
+      aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      {isDark ? <FiSun /> : <FiMoon />}
-      <span className="text-sm">{isDark ? "Light" : "Dark"}</span>
+      {isDark ? <FiSun className="h-5 w-5" /> : <FiMoon className="h-5 w-5" />}
+      {/* Optional text label (uncomment if you want text next to the icon) */}
+      {/* <span className="text-sm" style={{ fontFamily: "var(--font-inter)" }}>
+        {isDark ? "Light" : "Dark"}
+      </span> */}
     </button>
   );
 }

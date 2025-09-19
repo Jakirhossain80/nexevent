@@ -1,10 +1,9 @@
 // src/app/layout.jsx
-import Navbar from "@/components/Navbar";
 import "./globals.css";
-import { Poppins, Inter } from "next/font/google";
-import Providers from "./providers";
+import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { ThemeProvider } from "next-themes";
+import Providers from "./providers";
+import { Poppins, Inter } from "next/font/google";
 
 // Fonts (NexEvent: Poppins for headings, Inter for body)
 const poppins = Poppins({
@@ -56,8 +55,8 @@ export const metadata = {
     title: "NexEvent — Modern Event Management App",
     description:
       "NexEvent is a full-stack platform to create, manage, and book events. Modern, fast, and secure.",
-    images: ["https://nexevent.com/twitter-image.png"],
-    creator: "@YourTwitterHandle",
+    images: ["https://nexevent.com/twitter-image.png"], // replace with your actual image
+    creator: "@YourTwitterHandle", // optional
   },
 };
 
@@ -68,27 +67,29 @@ export default function RootLayout({ children, modal }) {
       suppressHydrationWarning
       className={`${poppins.variable} ${inter.variable}`}
     >
-      <body className="antialiased min-h-screen flex flex-col bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-500">
-        {/* Wrap app with Providers (Auth/Query/etc.) then ThemeProvider to keep SSR/CSR markup consistent */}
+      <body
+        className="
+          antialiased min-h-screen flex flex-col
+          bg-gray-50 text-slate-800
+          dark:bg-slate-900 dark:text-slate-100
+          transition-colors duration-500
+        "
+      >
+        {/* Providers wraps Theme + Session (one ThemeProvider only, defined in app/providers.jsx) */}
         <Providers>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <Navbar />
-            <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-              {children}
-            </main>
+          <Navbar />
 
-            {/* Render the parallel route slot so modals (e.g., @modal) can appear above pages */}
-            {modal}
+          <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+            {children}
+          </main>
 
-            <Footer />
-          </ThemeProvider>
+          {/* Parallel route slot (e.g., @modal) */}
+          {modal}
+
+          <Footer />
         </Providers>
       </body>
     </html>
   );
 }
+
