@@ -1,7 +1,10 @@
 // components/PortfolioGallery.jsx
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import PortfolioCard from "@/components/PortfolioCard";
 import {
   FaGlobe,
@@ -22,6 +25,15 @@ const ICON_BY_KEY = {
 export default function PortfolioGallery({ items = [], categories = [] }) {
   const [active, setActive] = useState("all");
 
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate each element once for a clean feel
+    });
+  }, []);
+
   const filtered = useMemo(() => {
     if (active === "all") return items;
     return items.filter((i) => i.category === active);
@@ -30,8 +42,11 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
   return (
     <div>
       {/* Filter buttons */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-        {categories.map(({ key, label }) => {
+      <div
+        className="flex flex-wrap items-center gap-2 sm:gap-3"
+        data-aos="fade-up"
+      >
+        {categories.map(({ key, label }, i) => {
           const selected = active === key;
           const Icon = ICON_BY_KEY[key] ?? FaGlobe;
 
@@ -53,6 +68,8 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
                 }
               `}
               style={{ fontFamily: "var(--font-inter)" }}
+              data-aos="zoom-in"
+              data-aos-delay={60 + i * 40} /* subtle stagger */
             >
               <Icon className="h-4 w-4" aria-hidden="true" />
               {label}
@@ -69,9 +86,11 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
         "
         role="list"
         aria-live="polite"
+        data-aos="fade-up"
+        data-aos-delay="80"
       >
-        {filtered.map((item) => (
-          <li key={item.id}>
+        {filtered.map((item, idx) => (
+          <li key={item.id} data-aos="fade-up" data-aos-delay={100 + (idx % 6) * 60}>
             <PortfolioCard {...item} />
           </li>
         ))}
@@ -83,6 +102,7 @@ export default function PortfolioGallery({ items = [], categories = [] }) {
           className="mt-6 text-sm text-slate-500 dark:text-slate-400"
           style={{ fontFamily: "var(--font-inter)" }}
           role="status"
+          data-aos="fade-up"
         >
           No items found for this category.
         </p>

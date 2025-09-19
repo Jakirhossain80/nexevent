@@ -1,3 +1,9 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Image from "next/image";
 import { FaRegCalendarCheck, FaUsers, FaRegLightbulb, FaGlobe } from "react-icons/fa";
 
@@ -11,6 +17,16 @@ const ICONS = {
 export default function PortfolioCard({ image, title, desc, category }) {
   const Icon = ICONS[category] ?? FaGlobe;
 
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
+
   return (
     <article
       className="
@@ -21,8 +37,9 @@ export default function PortfolioCard({ image, title, desc, category }) {
         hover:-translate-y-0.5 hover:shadow-md
         focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
       "
+      data-aos="fade-up"
     >
-      <div className="relative aspect-[16/10]">
+      <div className="relative aspect-[16/10]" data-aos="zoom-in" data-aos-delay="80">
         <Image
           src={image}
           alt={title}
@@ -42,6 +59,8 @@ export default function PortfolioCard({ image, title, desc, category }) {
             transition-all duration-500
           "
           style={{ fontFamily: "var(--font-inter)" }}
+          data-aos="fade-down"
+          data-aos-delay="140"
         >
           <Icon className="h-3.5 w-3.5" aria-hidden="true" />
           {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -52,12 +71,16 @@ export default function PortfolioCard({ image, title, desc, category }) {
         <h3
           className="text-base sm:text-lg font-semibold"
           style={{ fontFamily: "var(--font-poppins)" }}
+          data-aos="fade-up"
+          data-aos-delay="120"
         >
           {title}
         </h3>
         <p
           className="mt-1 text-sm sm:text-base text-slate-700 dark:text-slate-200 line-clamp-3"
           style={{ fontFamily: "var(--font-inter)" }}
+          data-aos="fade-up"
+          data-aos-delay="160"
         >
           {desc}
         </p>

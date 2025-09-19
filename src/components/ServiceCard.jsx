@@ -1,4 +1,20 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 export default function ServiceCard({ Icon, title, desc }) {
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate each card once
+    });
+  }, []);
+
   return (
     <article
       className="
@@ -9,6 +25,7 @@ export default function ServiceCard({ Icon, title, desc }) {
         hover:-translate-y-0.5 hover:shadow-md
         focus-within:ring-2 focus-within:ring-indigo-600 dark:focus-within:ring-indigo-400
       "
+      data-aos="fade-up"
     >
       <div className="flex items-start gap-4">
         <span
@@ -21,6 +38,8 @@ export default function ServiceCard({ Icon, title, desc }) {
             shrink-0
           "
           aria-hidden="true"
+          data-aos="zoom-in"
+          data-aos-delay="80"
         >
           <Icon size={22} />
         </span>
@@ -29,12 +48,16 @@ export default function ServiceCard({ Icon, title, desc }) {
           <h3
             className="text-base sm:text-lg font-semibold leading-snug"
             style={{ fontFamily: "var(--font-poppins)" }}
+            data-aos="fade-up"
+            data-aos-delay="120"
           >
             {title}
           </h3>
           <p
             className="mt-1 text-sm sm:text-base text-slate-700 dark:text-slate-200"
             style={{ fontFamily: "var(--font-inter)" }}
+            data-aos="fade-up"
+            data-aos-delay="160"
           >
             {desc}
           </p>

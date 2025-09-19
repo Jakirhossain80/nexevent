@@ -1,15 +1,32 @@
+"use client";
+
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import Image from "next/image";
 
 export default function StoryCard({ story }) {
   const { image, title, blurb, client, alt } = story;
+
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate each card once for a clean feel
+    });
+  }, []);
 
   return (
     <article
       className="group rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow-sm hover:shadow-md transition-all duration-500 focus-within:ring-2 focus-within:ring-indigo-500"
       tabIndex={0}
       aria-label={`${title} success story`}
+      data-aos="fade-up"
     >
-      <div className="relative h-48 w-full">
+      <div className="relative h-48 w-full" data-aos="zoom-in" data-aos-delay="80">
         <Image
           src={image}
           alt={alt}
@@ -23,13 +40,23 @@ export default function StoryCard({ story }) {
         <h3
           className="text-lg font-semibold text-slate-900 dark:text-slate-100 line-clamp-1"
           style={{ fontFamily: "var(--font-poppins)" }}
+          data-aos="fade-up"
+          data-aos-delay="120"
         >
           {title}
         </h3>
-        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3">
+        <p
+          className="mt-2 text-sm text-slate-600 dark:text-slate-300 line-clamp-3"
+          data-aos="fade-up"
+          data-aos-delay="160"
+        >
           {blurb}
         </p>
-        <div className="mt-4 flex items-center justify-between">
+        <div
+          className="mt-4 flex items-center justify-between"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
           <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
             {client}
           </span>

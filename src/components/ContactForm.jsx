@@ -1,15 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function ContactForm() {
   const [status, setStatus] = useState({ type: "idle", message: "" });
+
+  // Initialize AOS (client-only)
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element
+    });
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setStatus({ type: "loading", message: "Sending..." });
 
-   
+    // Mock async submit (preserves existing behavior)
     setTimeout(() => {
       setStatus({
         type: "success",
@@ -24,9 +36,10 @@ export default function ContactForm() {
       onSubmit={handleSubmit}
       className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500"
       aria-label="Contact form"
+      data-aos="fade-up"
     >
       <div className="space-y-5">
-        <div>
+        <div data-aos="fade-up" data-aos-delay="80">
           <label htmlFor="name" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Name
           </label>
@@ -42,7 +55,7 @@ export default function ContactForm() {
           />
         </div>
 
-        <div>
+        <div data-aos="fade-up" data-aos-delay="140">
           <label htmlFor="email" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Email
           </label>
@@ -58,7 +71,7 @@ export default function ContactForm() {
           />
         </div>
 
-        <div>
+        <div data-aos="fade-up" data-aos-delay="200">
           <label htmlFor="subject" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Subject
           </label>
@@ -73,7 +86,7 @@ export default function ContactForm() {
           />
         </div>
 
-        <div>
+        <div data-aos="fade-up" data-aos-delay="260">
           <label htmlFor="message" className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Message
           </label>
@@ -94,6 +107,8 @@ export default function ContactForm() {
             disabled={status.type === "loading"}
             className="inline-flex items-center justify-center rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white px-5 py-3 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 transition-all duration-500"
             aria-label="Submit contact form"
+            data-aos="zoom-in"
+            data-aos-delay="320"
           >
             {status.type === "loading" ? "Sending…" : "Send Message"}
           </button>
@@ -108,6 +123,8 @@ export default function ContactForm() {
                   : "text-slate-500 dark:text-slate-400"
               }`}
               role={status.type === "error" ? "alert" : "status"}
+              data-aos="fade-left"
+              data-aos-delay="360"
             >
               {status.message}
             </p>

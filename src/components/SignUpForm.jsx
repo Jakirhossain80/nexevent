@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useId } from "react";
@@ -14,6 +17,16 @@ export default function SignUpForm() {
   const emailId = useId();
   const passId = useId();
   const imageId = useId(); // added image field
+
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // clean, one-time animations for a form
+    });
+  }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -68,8 +81,9 @@ export default function SignUpForm() {
       onSubmit={onSubmit}
       className="space-y-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500"
       aria-label="Sign up form"
+      data-aos="fade-up"
     >
-      <div>
+      <div data-aos="fade-up" data-aos-delay="80">
         <label htmlFor={nameId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
           Full name
         </label>
@@ -82,7 +96,7 @@ export default function SignUpForm() {
         />
       </div>
 
-      <div>
+      <div data-aos="fade-up" data-aos-delay="140">
         <label htmlFor={emailId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
           Email
         </label>
@@ -97,7 +111,7 @@ export default function SignUpForm() {
       </div>
 
       {/* New: optional Image URL */}
-      <div>
+      <div data-aos="fade-up" data-aos-delay="200">
         <label htmlFor={imageId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
           Image URL (optional)
         </label>
@@ -111,7 +125,7 @@ export default function SignUpForm() {
         />
       </div>
 
-      <div>
+      <div data-aos="fade-up" data-aos-delay="260">
         <label htmlFor={passId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
           Password
         </label>
@@ -129,6 +143,8 @@ export default function SignUpForm() {
         type="submit"
         disabled={loading}
         className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white px-5 py-3 text-sm font-medium transition-all duration-500"
+        data-aos="zoom-in"
+        data-aos-delay="320"
       >
         {loading ? "Creating account…" : "Sign up"}
       </button>
@@ -143,6 +159,8 @@ export default function SignUpForm() {
               : "text-slate-500 dark:text-slate-400"
           }`}
           role={msg.type === "error" ? "alert" : "status"}
+          data-aos={msg.type === "error" ? "fade-right" : "fade-left"}
+          data-aos-delay="360"
         >
           {msg.text}
         </p>

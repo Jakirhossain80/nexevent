@@ -1,17 +1,29 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useState, useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 
 export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState({ type: "idle", text: "" });
 
-  const emailId = useId();
-  const passId = useId();
+  // Initialize AOS on the client
+  useEffect(() => {
+    AOS.init({
+      duration: 700,
+      easing: "ease-out-cubic",
+      offset: 80,
+      once: true, // animate once per element for a clean login UX
+    });
+  }, []);
+
+  const emailId = typeof window !== "undefined" ? "email-" + Math.random().toString(36).slice(2) : "email";
+  const passId = typeof window !== "undefined" ? "pass-" + Math.random().toString(36).slice(2) : "pass";
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -52,18 +64,22 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500">
+    <div
+      className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm transition-all duration-500"
+      data-aos="fade-up"
+      data-aos-offset="60"
+    >
       {/* If you want to surface query errors like ?error=CredentialsSignin, keep this lightweight hint */}
       {typeof window !== "undefined" &&
         window?.location?.search.includes("error=CredentialsSignin") &&
         !msg.text && (
-          <p className="mb-3 text-sm text-rose-600 dark:text-rose-400" role="alert">
+          <p className="mb-3 text-sm text-rose-600 dark:text-rose-400" role="alert" data-aos="fade-down">
             Invalid email or password.
           </p>
         )}
 
       <form onSubmit={onSubmit} className="space-y-4" aria-label="Login form">
-        <div>
+        <div data-aos="fade-up" data-aos-delay="80">
           <label htmlFor={emailId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Email
           </label>
@@ -78,7 +94,7 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
           />
         </div>
 
-        <div>
+        <div data-aos="fade-up" data-aos-delay="140">
           <label htmlFor={passId} className="block text-sm font-medium text-slate-700 dark:text-slate-200">
             Password
           </label>
@@ -98,12 +114,14 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
           disabled={loading}
           className="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white px-5 py-3 text-sm font-medium transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
           aria-label="Log in"
+          data-aos="zoom-in"
+          data-aos-delay="200"
         >
           {loading ? "Signing in…" : "Log in"}
         </button>
       </form>
 
-      <div className="mt-4">
+      <div className="mt-4" data-aos="fade-up" data-aos-delay="240">
         <button
           onClick={() => signIn("google", { callbackUrl: initialCallbackUrl || "/dashboard" })}
           className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-transparent hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 px-5 py-3 text-sm font-medium transition-all duration-500"
@@ -123,6 +141,8 @@ export default function LoginForm({ initialCallbackUrl = "/dashboard" }) {
               : "text-slate-500 dark:text-slate-400"
           }`}
           role={msg.type === "error" ? "alert" : "status"}
+          data-aos={msg.type === "error" ? "shake" : "fade-left"}
+          data-aos-delay="260"
         >
           {msg.text}
         </p>
