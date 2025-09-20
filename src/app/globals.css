@@ -1,39 +1,23 @@
-/* app/globals.css (Tailwind v4.1) */
+/* Tailwind v4 entry */
 @import "tailwindcss";
 
-/* Optional: nice light/dark base surface + smooth transitions */
-:root {
-  color-scheme: light;
-}
+/* Optional: smooth theme transitions and base surfaces */
+:root { color-scheme: light; }
+html.dark { color-scheme: dark; }
 
-html.dark {
-  color-scheme: dark;
-}
-
-html, body {
-  min-height: 100%;
-}
+html, body { min-height: 100%; }
 
 body {
-  /* Your NexEvent base surface */
-  /* Light */
+  /* light defaults */
   background-color: #F9FAFB; /* Gray-50 */
   color: #1E293B;            /* Slate-800 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.5s, color 0.5s;
+  transition: background-color .5s, color .5s;
 }
 
 html.dark body {
-  /* Dark */
+  /* dark defaults */
   background-color: #0F172A; /* Slate-900 */
   color: #F1F5F9;            /* Slate-100 */
-}
-
-/* (Optional) Utility helpers you want everywhere */
-.container {
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
 }

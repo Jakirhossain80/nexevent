@@ -8,28 +8,22 @@ import { FiSun, FiMoon } from "react-icons/fi";
 export default function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-
   useEffect(() => setMounted(true), []);
 
   if (!mounted) {
     return (
-      <button
-        aria-label="Toggle theme"
-        className="p-2 rounded-md text-slate-700 dark:text-slate-100 transition-colors"
-      >
+      <button aria-label="Toggle theme" className="p-2 rounded-md">
         <FiSun className="h-5 w-5 opacity-0" />
       </button>
     );
   }
 
   const isDark = resolvedTheme === "dark";
-
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
       className="
-        inline-flex items-center gap-2
-        rounded-md p-2
+        p-2 rounded-md
         text-slate-700 hover:bg-gray-100
         dark:text-slate-100 dark:hover:bg-slate-800
         transition-all duration-300

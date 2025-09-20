@@ -1,7 +1,6 @@
-// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: "class",
+  darkMode: "class",     // ✅ required for class-based dark mode
   theme: { extend: {} },
   plugins: [],
 };
