@@ -1,23 +1,17 @@
-/* Tailwind v4 entry */
+/* app/globals.css — Tailwind v4 */
 @import "tailwindcss";
 
-/* Optional: smooth theme transitions and base surfaces */
-:root { color-scheme: light; }
-html.dark { color-scheme: dark; }
+@layer base {
+  :root { color-scheme: light; }
+  html.dark { color-scheme: dark; }
 
-html, body { min-height: 100%; }
+  html, body { @apply min-h-full; }
 
-body {
-  /* light defaults */
-  background-color: #F9FAFB; /* Gray-50 */
-  color: #1E293B;            /* Slate-800 */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  transition: background-color .5s, color .5s;
-}
+  body {
+    @apply bg-gray-50 text-slate-800 antialiased transition-colors duration-500;
+  }
 
-html.dark body {
-  /* dark defaults */
-  background-color: #0F172A; /* Slate-900 */
-  color: #F1F5F9;            /* Slate-100 */
+  html.dark body {
+    @apply bg-slate-900 text-slate-100;
+  }
 }
